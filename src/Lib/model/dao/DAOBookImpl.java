@@ -17,7 +17,7 @@ public class DAOBookImpl implements DAOData<Book>{
 	public void save(Book b) {
 
 	    String sql_count = "select count(*) from lib_book";
-	    String sql_insert = "INSERT INTO lib_book() VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+	    String sql_insert = "INSERT INTO lib_book(b_id,b_name,author,pubyear,isbn,amount,publisher) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
 	    Connection conn = null;
 	    PreparedStatement ps = null;
 	    ResultSet rs = null;
@@ -33,21 +33,18 @@ public class DAOBookImpl implements DAOData<Book>{
 
 	        String pattern = "%020d"; // 格式化字串，整數，長度10，不足部分左邊補0
 	        String str = String.format(pattern, count + 1);
-	        String user_id = "b" + str;
+	        String book_id = "b" + str;
 
-//	        ps = conn.prepareStatement(sql_insert);
-//	        ps.setString(1, user_id);
-//	        ps.setString(2, user.getName());
-//	        ps.setString(3, user.getAccount());
-//	        ps.setString(4, user.getPassword());
-//	        ps.setInt(5, user.getKind());
-//	        ps.setInt(6, user.getSex());
-//	        ps.setDate(7, (Date) user.getBirthday());
-//	        ps.setString(8, user.getEmail());
-//	        ps.setString(9, user.getAddress());
-//	        ps.setString(10, user.getPhone());
-//	        ps.setInt(11,1);
-//	        ps.executeUpdate();
+	        ps = conn.prepareStatement(sql_insert);
+	        ps.setString(1, b.getID());
+	        ps.setString(2, b.getName());
+	        ps.setString(3, b.getAuthor());
+	        ps.setInt(4,b.getPublishYear());
+	        ps.setString(5, b.getIsbn());
+	        ps.setInt(6, b.getAmount());
+	        ps.setString(7, b.getPublisher());
+
+	        ps.executeUpdate();
 	        
 	    } catch (Exception e) {
 	        e.printStackTrace();
@@ -64,12 +61,7 @@ public class DAOBookImpl implements DAOData<Book>{
 	}
 
 	@Override
-	public List<Book> listAll() {
-
-
-		
-		
-		
+	public List<Book> listAll() {		
         List<Book> list = new ArrayList<Book>();
         String sql = "SELECT * FROM lib_book";
         Connection conn = null;
@@ -90,14 +82,7 @@ public class DAOBookImpl implements DAOData<Book>{
         } finally {
         	DBUtils.close(conn, ps, rs);
         }
-        return list;
-		
+        return list;		
 
 	}
-	//TODO:implement lookup similar book
-//	public List<Book> keyWordSearch(String keyword) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-
 }

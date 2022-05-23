@@ -102,7 +102,7 @@ public class LibModel {
 		//如果已經有了只要數量++
 		boolean exist=false;
 		for(Book book : books) {
-			if(b.getIsbn().equals(book.getIsbn())) {
+			if(b.getIsbn().equals(book.getIsbn())||b.getID().equals(book.getID())) {
 				book.setAmount(book.getAmount()+1);
 				exist=true;
 				bookDAO.update(book);
@@ -114,8 +114,43 @@ public class LibModel {
 		}
 		updateModel();		
 	}
-	public synchronized void returnBook(Book b) {
-		
+	//TODO:借閱紀錄
+	
+	
+	
+	public synchronized History getHistroy(User u, Book b) {
+		History his=null;
+		for(History h:histories) {
+			if(h.getBid().equals(b.getID())&&h.getUid().equals(u.getId())&&h.getReturnDay().equals(null)) {
+				his =h;				
+			}			
+		}		
+		return his;
 	}
+	
+	public synchronized void takeOutBook(History h) {
+//		History his = new History();
+		for(Book book : books) {
+			if(book.getID().equals(h.getBid())) {
+				book.setAmount(book.getAmount()-1);
+				bookDAO.update(book);
+				break;
+			}
+		}		
+		historyDAO.save(h);		
+		updateModel();
+	}
+	
+	public synchronized void putBackBook(History h) {
+		Book b = new Book();
+		b.setID(h.getBid());
+		addBook(b);
+		historyDAO.update(h);
+		updateModel();
+	}
+
+	
+	
+	
 	
 }

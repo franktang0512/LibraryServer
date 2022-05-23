@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import Lib.model.LibModel;
 import Lib.model.data.Book;
+import Lib.model.data.History;
 import Lib.model.data.User;
 
 public class Controller {
@@ -96,6 +97,48 @@ public class Controller {
 		return responseJson;
 	}
 	
+	public JSONObject borrowBook(JSONObject object) {
+		JSONObject responseJson=null;
+		String book_id =  object.getString("book_id");
+		String account =  object.getString("account");
+		User u =libmodel.getUserByAcc(account);
+		java.util.Date now = new java.util.Date();
+		java.sql.Date sqlDate = new java.sql.Date(now.getTime());
+		History history = new History(null,u.getId(),book_id,sqlDate,null);
+		libmodel.takeOutBook(history);
+		
+		responseJson = new JSONObject("{\"status\":\"successful\"}");
+		return responseJson;
+	}
+	public JSONObject returnBook(JSONObject object) {
+		JSONObject responseJson=null;
+		String book_id =  object.getString("book_id");
+		String account =  object.getString("account");
+		User u =libmodel.getUserByAcc(account);
+		Book b = new Book();
+		b.setID(book_id);
+		History h = libmodel.getHistroy(u, b);
+		//TODO:search for the null end date and 
+		
+		java.util.Date now = new java.util.Date();
+		java.sql.Date sqlDate = new java.sql.Date(now.getTime());
+		h.setReturnDay(sqlDate);
+		libmodel.putBackBook(h);
+		
+		responseJson = new JSONObject("{\"status\":\"successful\"}");
+		return responseJson;
+	}
+	
+//	public JSONObject returnBook(JSONObject object) {
+//		JSONObject responseJson=null;
+//		String book_id =  object.getString("book_id");
+//		String account =  object.getString("account");
+//		History history = new History();
+//		
+//		
+//		return responseJson;
+//	}
+	
 	public String commandHandle(String inputLine) {
 		System.out.println("the requeset:"+inputLine);
 		
@@ -114,10 +157,10 @@ public class Controller {
 				break;
 			//TODO:查詢圖書（可能是查書名或作者）、借閱紀錄查詢
 			case "borrowBook":
-				respond=enroll(object).toString();
+				respond=borrowBook(object).toString();
 				break;
 			case "returnBook":
-				respond=enroll(object).toString();
+				respond=returnBook(object).toString();
 				break;
 			case "lookupBook":
 				respond=lookupBook(object).toString();
