@@ -98,7 +98,7 @@ public class LibModel {
 		return similar_string_book;
 
 	}
-	public void addBook(Book b) {
+	public synchronized void addBook(Book b) {
 		//如果已經有了只要數量++
 		boolean exist=false;
 		for(Book book : books) {
@@ -114,6 +114,8 @@ public class LibModel {
 		}
 		updateModel();		
 	}
-
+	public synchronized void returnBook(Book b) {
+		
+	}
 	
 }

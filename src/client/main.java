@@ -18,9 +18,9 @@ public class main {
 		PrintWriter out;
 		BufferedReader in;
 //		String sss="{\"cmd\":\"login\",\"account\":\"libadmin\",\"psd\":\"libadmin\"}";
-		String sss="{\"cmd\":\"lookupBook\",\"keyword\":\"deep\"}";
+		String sss="{\"cmd\":\"lookupBook\",\"keyword\":\"ep\"}";
 		
-		//String s="{"+"\"cmd\":\"login\","+"\"account\":\"abc\","+"\"psd\":\"123\"}";
+//		String sss="{"+"\"cmd\":\"login\","+"\"account\":\"abc\","+"\"psd\":\"123\"}";
 		out = new PrintWriter(echoSocket.getOutputStream(),true);
 		in = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));		
 		out.println(sss);
