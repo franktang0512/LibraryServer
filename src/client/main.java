@@ -16,7 +16,7 @@ public class main {
 		Socket echoSocket=new Socket("127.0.0.1",10234);
 		PrintWriter out;
 		BufferedReader in;
-		String sss="{\"cmd\":\"login\",\"account\":\"libadmin\",\"psd\":\"libadmin\"}";
+		String sss="{\"cmd\":\"login\",\"account\":\"aaa\",\"psd\":\"libadmin\"}";
 		
 		//String s="{"+"\"cmd\":\"login\","+"\"account\":\"abc\","+"\"psd\":\"123\"}";
 		out = new PrintWriter(echoSocket.getOutputStream(),true);

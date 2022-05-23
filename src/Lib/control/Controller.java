@@ -45,10 +45,10 @@ public class Controller {
         
         User user = libmodel.getUser(account);
                
-        if(account.equals(user.getAccount())&&psd.equals(user.getPassword())) {
-        	responseJson = new JSONObject("{\"status\":\"successful\",\"kine\":"+user.getKind()+"}");
-        }else {
+        if(user==null) {
         	responseJson = new JSONObject("{\"status\":\"fail\"}");
+        }else if(account.equals(user.getAccount())&&psd.equals(user.getPassword())){        	
+        	responseJson = new JSONObject("{\"status\":\"successful\",\"kine\":"+user.getKind()+"}");
         }
         return responseJson;
 		
