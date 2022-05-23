@@ -31,7 +31,7 @@ public class test {
         
         
 		u.setBirthday(date);
-		u.setPhone("0912345678");
+		u.setPhone("909090909099090");
 		u.setAddress("Taipei");
 		u.setEmail("ffff@yahoo.com");
 		u.setName("Flick");
@@ -40,7 +40,7 @@ public class test {
 		
 		
 		LibModel ll = LibModel.getInstance();
-		ll.addUser(u);
+		ll.updateUser(u);
 		
 		
 

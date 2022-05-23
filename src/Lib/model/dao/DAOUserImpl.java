@@ -58,17 +58,30 @@ public class DAOUserImpl implements DAOData<User>{
 	
 	@Override
 	public void update(User user) {
-        String sql = "UPDATE lib_user SET username=?,age=? WHERE id=?";
+        String sql = "UPDATE lib_user "
+        		+ "SET user_name=?,password=?,kind=?,sex=?,birth=?,email=?,address=?,phone=?,can_use=? "
+        		+ "WHERE account=?";
+        
+        
+        
+        
         Connection conn = null;
         PreparedStatement ps = null;
         try {
             conn = DBUtils.getConnection();
             // 創建語句對象
             ps = conn.prepareStatement(sql);
-//            ps.setString(1, user.getUsername());
-//            ps.setInt(2, user.getAge());
-//            ps.setLong(3, user.getId());
-            // 執行SQL語句
+	        
+	        ps.setString(1, user.getName());	        
+	        ps.setString(2, user.getPassword());
+	        ps.setInt(3, user.getKind());
+	        ps.setInt(4, user.getSex());
+	        ps.setDate(5, (Date) user.getBirthday());
+	        ps.setString(6, user.getEmail());
+	        ps.setString(7, user.getAddress());
+	        ps.setString(8, user.getPhone());
+	        ps.setInt(9,user.getEnable());
+	        ps.setString(10, user.getAccount());
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();

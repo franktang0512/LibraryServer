@@ -8,6 +8,11 @@ import Lib.model.data.*;
 
 public class LibModel {
 	//TODO:放ado
+	DAOData userDAO;
+	DAOData bookDAO;
+	DAOData historyDAO;
+	DAOData resevationDAO;
+	DAOData recommendationsDAO;
 	
 	//TODO:資料
 	ArrayList<User>users;
@@ -19,6 +24,11 @@ public class LibModel {
 	//TODO:建立獨體模式
 	private volatile static LibModel libmodel;
 	private LibModel(){
+		userDAO = new DAOUserImpl();
+		bookDAO = new DAOBookImpl();
+		historyDAO = new DAOHistoryImpl();	
+		resevationDAO = new DAOReservationImpl();
+		recommendationsDAO = new DAORecommendImpl();
 		updateModel();
 	}
 	
@@ -34,27 +44,17 @@ public class LibModel {
 	}
 	
 	//triggered if there is any write into DB or when initializing the model, and then update the data members in this model
-	private void updateModel() {
-		DAOData userDAO = new DAOUserImpl();		
-		users = (ArrayList<User>) userDAO.listAll();
-		
-		DAOData bookDAO = new DAOBookImpl();		
-		books = (ArrayList<Book>) bookDAO.listAll();
-		
-		DAOData historyDAO = new DAOHistoryImpl();		
-		histories = (ArrayList<History>) userDAO.listAll();
-		
-		DAOData resevationDAO = new DAOReservationImpl();		
+	private void updateModel() {	
+		users = (ArrayList<User>) userDAO.listAll();	
+		books = (ArrayList<Book>) bookDAO.listAll();	
+		histories = (ArrayList<History>) userDAO.listAll();	
 		resevations = (ArrayList<Reservation>) userDAO.listAll();
-		
-		DAOData recommendationsDAO = new DAORecommendImpl();		
 		recommendations = (ArrayList<Recommend>) userDAO.listAll();
 		
 	}
 	
 	//TODO:建立資料處裡函式
-	public User getUser(String acc) {
-		
+	public User getUser(String acc) {		
 		User user=null;
 		for (User u : users) {
 			  if(u.getAccount().equals(acc)) {
@@ -64,15 +64,12 @@ public class LibModel {
 		}	
 		return user;
 	}
-	
-	public synchronized void setUser(User user) {
-		DAOData userDAO = new DAOUserImpl();		
-		userDAO.update(user);
+	public synchronized void addUser(User user) {		
+		userDAO.save(user);
 		updateModel();
 	}
-	public synchronized void addUser(User user) {
-		DAOData userDAO = new DAOUserImpl();		
-		userDAO.save(user);
+	public synchronized void updateUser(User user) {		
+		userDAO.update(user);
 		updateModel();
 	}
 	
