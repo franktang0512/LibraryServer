@@ -1,5 +1,8 @@
 package Lib.control;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.json.JSONObject;
 
 import Lib.model.LibModel;
@@ -17,22 +20,36 @@ public class Controller {
 	
 	public JSONObject enroll(JSONObject object) {
 		JSONObject responseJson=null;
-		
-        String account =  object.getString("account");
-        String psd =  object.getString("psd");
-        
-       
-        
-        
-        
-        if(account.equals("abc")&&psd.equals("123")) {
-        	responseJson = new JSONObject("{\"status\":\"successful\",\"kine\":1}");
-        }else if(account.equals("admin")&&psd.equals("libadmin")){
-        	responseJson = new JSONObject("{\"status\":\"successful\",\"kine\":2}");
-        }else {
-        	responseJson = new JSONObject("{\"status\":\"fail\"}");
-        }
-        return responseJson;
+		try {
+	        User user = new User();
+	        user.setName(object.getString("name"));
+	        user.setAccount(object.getString("account"));
+	        user.setPassword(object.getString("psd"));
+	        user.setSex(object.getInt("sex"));
+	        user.setKind(object.getInt("kind"));
+	        //處理java util sql date差異問題 這裡統一用sql的date
+	        SimpleDateFormat formatter1=new SimpleDateFormat("dd-MMM-yyyy");
+	        Date bd=formatter1.parse(object.getString("date"));
+	        long timeInMilliSeconds = bd.getTime();
+	        java.sql.Date date = new java.sql.Date(timeInMilliSeconds);
+	        
+	        
+	        
+	        user.setBirthday(date);
+	        user.setEmail(object.getString("email"));
+	        user.setPhone(object.getString("phone"));
+	        user.setAddress(object.getString("address"));
+
+	        libmodel.addUser(user);
+	        
+	        
+	        responseJson = new JSONObject("{\"status\":\"successful\"}");
+			
+		}
+		catch(Exception e) {
+			responseJson = new JSONObject("{\"status\":\"fail\"}");			
+		}
+		return responseJson;
 		
 	}
 	

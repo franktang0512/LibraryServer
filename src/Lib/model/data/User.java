@@ -1,6 +1,7 @@
 package Lib.model.data;
 
-import java.util.Date;
+//import java.util.Date;
+import java.sql.Date;
 
 public class User {
 	private String user_id;

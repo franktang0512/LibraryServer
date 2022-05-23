@@ -70,6 +70,11 @@ public class LibModel {
 		userDAO.update(user);
 		updateModel();
 	}
+	public synchronized void addUser(User user) {
+		DAOData userDAO = new DAOUserImpl();		
+		userDAO.save(user);
+		updateModel();
+	}
 	
 	
 	
