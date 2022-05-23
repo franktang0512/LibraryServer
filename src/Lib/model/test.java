@@ -13,8 +13,7 @@ import Lib.model.data.User;
 public class test {
 
 	public static void main(String[] args) throws ParseException {
-		// TODO Auto-generated method stub
-		DAOData userDAO = new DAOUserImpl();
+//		DAOData userDAO = new DAOUserImpl();
 		
 		//List<User> list = userDAO.listAll();
 		User u = new User();
@@ -36,8 +35,13 @@ public class test {
 		u.setAddress("Taipei");
 		u.setEmail("ffff@yahoo.com");
 		u.setName("Flick");
-		userDAO.save(u);
-		System.out.println();
+//		userDAO.save(u);
+		
+		
+		
+		LibModel ll = LibModel.getInstance();
+		ll.addUser(u);
+		System.out.println(ll.getcount());
 		
 		
 
