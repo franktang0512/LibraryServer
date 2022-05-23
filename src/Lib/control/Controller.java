@@ -48,7 +48,7 @@ public class Controller {
         if(user==null) {
         	responseJson = new JSONObject("{\"status\":\"fail\"}");
         }else if(account.equals(user.getAccount())&&psd.equals(user.getPassword())){        	
-        	responseJson = new JSONObject("{\"status\":\"successful\",\"kine\":"+user.getKind()+"}");
+        	responseJson = new JSONObject("{\"status\":\"successful\",\"kind\":"+user.getKind()+"}");
         }
         return responseJson;
 		
