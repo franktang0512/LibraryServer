@@ -4,12 +4,12 @@ public class Book {
 	private String book_id;
     private String book_name;
     private String author;
-    private String publishYear;
+    private int publishYear;
     private String publisher;
     private String isbn;
     private int amount;
-    
-    public Book(String id, String name, String author, String publishY, String publisher, 
+    public Book() {}
+    public Book(String id, String name, String author, int publishY, String publisher, 
     		String isbn, int amount) {
 		this.book_id = id;
 		this.book_name = name;
@@ -38,10 +38,10 @@ public class Book {
 	public void setAuthor(String s) {
 		author = s;
     }
-	public String getPublishYear() {
+	public int getPublishYear() {
     	return publishYear;
     }
-	public void setPublishYear(String s) {
+	public void setPublishYear(int s) {
 		publishYear = s;
     }
 	public String getPublisher() {

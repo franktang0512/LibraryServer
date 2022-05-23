@@ -73,20 +73,26 @@ public class Controller {
 	}
 	
 	public JSONObject lookupBook(JSONObject object) {
+		
 		JSONObject responseJson=null;
 		String booksstring="";
 		String keyword =  object.getString("keyword");
 		ArrayList<Book> books = (ArrayList<Book>) libmodel.getSearchBooks(keyword);	
+		
 		if(books==null) {
 			return new JSONObject("{\"status\":\"fail\",\"message\":\"Sorry We don't have the book you are looking for\"}");
 		}
+		
 		for(int i =0;i<books.size();i++) {
-			booksstring="{\"bookname\":\""+books.get(i).getName()+"\"}";
+			
+			booksstring+="{\"bookname\":\""+books.get(i).getName()+"\"}";
 			if(!(i==books.size()-1)) {
 				booksstring+=",";
 			}			
 		}
+//		System.out.println("booksstring:"+booksstring);
 		booksstring="{\"status\":\"successful\",\"books\":["+booksstring+"]}";
+		responseJson= new JSONObject(booksstring);
 		return responseJson;
 	}
 	

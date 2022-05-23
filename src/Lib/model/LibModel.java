@@ -82,8 +82,6 @@ public class LibModel {
 	public List<Book> getSearchBooks(String keyword){
 
 		
-		
-		
 		int bookcount =this.books.size();
 		ArrayList<Book> similar_string_book = new ArrayList<Book>();
 		
