@@ -7,10 +7,10 @@ public class Book {
     private String publishYear;
     private String publisher;
     private String isbn;
-    private String amount;
+    private int amount;
     
     public Book(String id, String name, String author, String publishY, String publisher, 
-    		String isbn, String amount) {
+    		String isbn, int amount) {
 		this.book_id = id;
 		this.book_name = name;
 		this.author = author;
@@ -20,10 +20,10 @@ public class Book {
 		this.amount = amount;
     }
     
-    public String getId() {
+    public String getID() {
     	return book_id;
     }
-	public void setId(String s) {
+	public void setID(String s) {
 		book_id = s;
     }
 	public String getName() {
@@ -56,11 +56,11 @@ public class Book {
 	public void setIsbn(String s) {
 		isbn = s;
     }
-	public String getAmount() {
+	public int getAmount() {
     	return amount;
     }
-	public void setAmount(String s) {
-		amount = s;
+	public void setAmount(int bookaccount) {
+		amount = bookaccount;
     }
 
 }

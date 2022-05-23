@@ -1,11 +1,13 @@
 package Lib.control;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.json.JSONObject;
 
 import Lib.model.LibModel;
+import Lib.model.data.Book;
 import Lib.model.data.User;
 
 public class Controller {
@@ -59,7 +61,7 @@ public class Controller {
         String psd =  object.getString("psd");
         
         
-        User user = libmodel.getUser(account);
+        User user = libmodel.getUserByAcc(account);
                
         if(user==null) {
         	responseJson = new JSONObject("{\"status\":\"fail\"}");
@@ -70,7 +72,23 @@ public class Controller {
 		
 	}
 	
-	
+	public JSONObject lookupBook(JSONObject object) {
+		JSONObject responseJson=null;
+		String booksstring="";
+		String keyword =  object.getString("keyword");
+		ArrayList<Book> books = (ArrayList<Book>) libmodel.getSearchBooks(keyword);	
+		if(books==null) {
+			return new JSONObject("{\"status\":\"fail\",\"message\":\"Sorry We don't have the book you are looking for\"}");
+		}
+		for(int i =0;i<books.size();i++) {
+			booksstring="{\"bookname\":\""+books.get(i).getName()+"\"}";
+			if(!(i==books.size()-1)) {
+				booksstring+=",";
+			}			
+		}
+		booksstring="{\"status\":\"successful\",\"books\":["+booksstring+"]}";
+		return responseJson;
+	}
 	
 	public String commandHandle(String inputLine) {
 		System.out.println("the requeset:"+inputLine);
@@ -94,6 +112,9 @@ public class Controller {
 				break;
 			case "returnBook":
 				respond=enroll(object).toString();
+				break;
+			case "lookupBook":
+				respond=lookupBook(object).toString();
 				break;
 			case "lookupByBook":
 				respond=enroll(object).toString();

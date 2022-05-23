@@ -53,12 +53,14 @@ public class LibModel {
 		
 	}
 	
-	//TODO:建立資料處裡函式
-	public User getUser(String acc) {		
+	//TODO:建立User資料處裡函式
+	public List<User> getAllUsers() {
+		return users;
+	}
+	public User getUserByAcc(String acc) {		
 		User user=null;
 		for (User u : users) {
 			  if(u.getAccount().equals(acc)) {
-//				  user = new User();
 				  user =u;
 			  }
 		}	
@@ -73,9 +75,47 @@ public class LibModel {
 		updateModel();
 	}
 	
-	
-	
-	
+	//TODO:建立Book資料處裡函式
+	public List<Book> getAllBooks(){
+		return books;
+	}
+	public List<Book> getSearchBooks(String keyword){
+
+		
+		
+		
+		int bookcount =this.books.size();
+		ArrayList<Book> similar_string_book = new ArrayList<Book>();
+		
+		for(int j=0;j<bookcount;j++)
+		{
+			if(this.books.get(j).getName().indexOf(keyword)!=-1){
+				similar_string_book.add(this.books.get(j));
+			}
+		}
+		if(similar_string_book.size()==0){
+			return null;
+		}
+
+		return similar_string_book;
+
+	}
+	public void addBook(Book b) {
+		//如果已經有了只要數量++
+		boolean exist=false;
+		for(Book book : books) {
+			if(b.getIsbn().equals(book.getIsbn())) {
+				book.setAmount(book.getAmount()+1);
+				exist=true;
+				bookDAO.update(book);
+			}
+		}
+		//不存在才要加入
+		if(!exist) {
+			bookDAO.save(b);			
+		}
+		updateModel();		
+	}
 
 	
 }
