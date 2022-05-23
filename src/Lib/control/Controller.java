@@ -31,8 +31,7 @@ public class Controller {
 	        SimpleDateFormat formatter1=new SimpleDateFormat("dd-MMM-yyyy");
 	        Date bd=formatter1.parse(object.getString("date"));
 	        long timeInMilliSeconds = bd.getTime();
-	        java.sql.Date date = new java.sql.Date(timeInMilliSeconds);
-	        
+	        java.sql.Date date = new java.sql.Date(timeInMilliSeconds); 
 	        
 	        
 	        user.setBirthday(date);

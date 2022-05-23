@@ -41,7 +41,6 @@ public class test {
 		
 		LibModel ll = LibModel.getInstance();
 		ll.addUser(u);
-		System.out.println(ll.getcount());
 		
 		
 
