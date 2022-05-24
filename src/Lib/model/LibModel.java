@@ -167,9 +167,7 @@ public class LibModel {
 	
 	public synchronized void putBackBook(History h) {
 		Book b = new Book();
-		b.setID(h.getBid());
-		
-		
+		b.setID(h.getBid());		
 		addBook(b);
 		historyDAO.update(h);
 		updateModel();
