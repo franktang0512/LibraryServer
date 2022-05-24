@@ -40,7 +40,8 @@ public class test {
 		
 		
 		LibModel ll = LibModel.getInstance();
-		ll.updateUser(u);
+		User u0 = ll.getUserByAcc("abc");
+		System.out.println(u0.getId());
 		
 		
 

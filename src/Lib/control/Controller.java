@@ -1,8 +1,9 @@
 package Lib.control;
 
+import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+//import java.util.Date;
 
 import org.json.JSONObject;
 
@@ -32,9 +33,9 @@ public class Controller {
 	        user.setKind(object.getInt("kind"));
 	        //處理java util sql date差異問題 這裡統一用sql的date
 	        SimpleDateFormat formatter1=new SimpleDateFormat("yyyy-MM-dd");
-	        Date bd=formatter1.parse(object.getString("birth"));
+	        java.util.Date bd=formatter1.parse(object.getString("birth"));
 	        long timeInMilliSeconds = bd.getTime();
-	        java.sql.Date date = new java.sql.Date(timeInMilliSeconds); 
+	        Date date = new Date(timeInMilliSeconds); 
 	        
 	        
 	        user.setBirthday(date);
@@ -102,12 +103,20 @@ public class Controller {
 		JSONObject responseJson=null;
 		String book_id =  object.getString("book_id");
 		String account =  object.getString("account");
+		System.out.println("zxcvbnm,");
 		User u =libmodel.getUserByAcc(account);
-		java.util.Date now = new java.util.Date();
-		java.sql.Date sqlDate = new java.sql.Date(now.getTime());
-		History history = new History(null,u.getId(),book_id,sqlDate,null);
+		if(u==null) {
+			responseJson = new JSONObject("{\"status\":\"fail\",\"message\":\"not a member\"}");
+			return responseJson;
+		}
+		System.out.println("zxcvbnm,qwertyuio");
+		long now = System.currentTimeMillis();
+		Date sqlDate = new Date(now);
+		History history = new History();
+		history.setBid(book_id);
+		history.setUid(u.getId());
+		history.setBorrowDay(sqlDate);
 		libmodel.takeOutBook(history);
-		
 		responseJson = new JSONObject("{\"status\":\"successful\"}");
 		return responseJson;
 	}
@@ -160,10 +169,8 @@ public class Controller {
 		String respond="";
 		
 		switch(cmd) {
-			case "login":
-				
-				respond=login(object).toString();
-				
+			case "login":				
+				respond=login(object).toString();				
 				break;
 			case "enroll":
 				respond=enroll(object).toString();
