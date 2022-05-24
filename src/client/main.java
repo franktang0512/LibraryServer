@@ -23,7 +23,8 @@ public class main {
 //				+ "\"phone\":\"0900053322\",\"account\":\"florauser\",\"psd\":\"florahavefun\",\"kind\":2}";
 		
 //		String sss="{"+"\"cmd\":\"login\","+"\"account\":\"abc\","+"\"psd\":\"123\"}";
-		String sss="{"+"\"cmd\":\"borrowBook\","+"\"book_id\":\"b00000000001\","+"\"account\":\"abc\"}";
+		String sss="{"+"\"cmd\":\"returnBook\","+"\"book_id\":\"b00000000001\","+"\"account\":\"abc\"}";
+//		String sss="{"+"\"cmd\":\"borrowBook\","+"\"book_id\":\"b00000000001\","+"\"account\":\"abc\"}";
 		
 		out = new PrintWriter(echoSocket.getOutputStream(),true);
 		in = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));		

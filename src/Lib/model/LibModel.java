@@ -47,9 +47,9 @@ public class LibModel {
 	private void updateModel() {	
 		users = (ArrayList<User>) userDAO.listAll();	
 		books = (ArrayList<Book>) bookDAO.listAll();	
-		histories = (ArrayList<History>) userDAO.listAll();	
-		resevations = (ArrayList<Reservation>) userDAO.listAll();
-		recommendations = (ArrayList<Recommend>) userDAO.listAll();
+		histories = (ArrayList<History>) historyDAO.listAll();	
+		resevations = (ArrayList<Reservation>) resevationDAO.listAll();
+		recommendations = (ArrayList<Recommend>) recommendationsDAO.listAll();
 		
 	}
 	
@@ -100,10 +100,16 @@ public class LibModel {
 	}
 	public synchronized void addBook(Book b) {
 		//如果已經有了只要數量++
+//		System.out.println(b.getID());
 		boolean exist=false;
 		for(Book book : books) {
-			if(b.getIsbn().equals(book.getIsbn())||b.getID().equals(book.getID())) {
+//			System.out.println(book.getID());
+//			System.out.println(b.getIsbn().equals(book.getIsbn()));
+//			System.out.println(b.getID().equals(book.getID()))			
+			if(/*b.getIsbn().equals(book.getIsbn())||*/b.getID().equals(book.getID())) {				
+//				System.out.println(book.getAmount());
 				book.setAmount(book.getAmount()+1);
+//				System.out.println(book.getAmount());				
 				exist=true;
 				bookDAO.update(book);
 			}
@@ -126,13 +132,22 @@ public class LibModel {
 		}		
 		return his;
 	}
-	public synchronized History getHistroy(User u, Book b) {
-		History his=null;
+	public History getHistroy(User u, Book b) {
+		History his=null;	
 		for(History h:histories) {
-			if(h.getBid().equals(b.getID())&&h.getUid().equals(u.getId())&&h.getReturnDay().equals(null)) {
+			if(h.getBid().equals(b.getID())&&h.getUid().equals(u.getId())&&h.getReturnDay()==null){//&&h.getReturnDay().equals(null)) {
 				his =h;				
+				break;
 			}			
 		}		
+//		
+//		
+//		System.out.println(his.getBid());
+//		System.out.println(his.getHid());
+//		System.out.println(his.getUid());
+//		System.out.println(his.getBorrowDay());
+//		System.out.println(his.getReturnDay());
+		
 		return his;
 	}
 	
@@ -145,6 +160,7 @@ public class LibModel {
 				break;
 			}
 		}		
+		
 		historyDAO.save(h);		
 		updateModel();
 	}
@@ -152,6 +168,8 @@ public class LibModel {
 	public synchronized void putBackBook(History h) {
 		Book b = new Book();
 		b.setID(h.getBid());
+		
+		
 		addBook(b);
 		historyDAO.update(h);
 		updateModel();

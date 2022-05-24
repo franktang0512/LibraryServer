@@ -57,6 +57,30 @@ public class DAOBookImpl implements DAOData<Book>{
 	@Override
 	public void update(Book b) {
 		// TODO Auto-generated method stub
+        String sql = "UPDATE lib_book "
+        		+ "SET b_name=?,author=?,pubyear=?,isbn=?,amount=?,publisher=? "
+        		+ "WHERE b_id=?";
+        
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = DBUtils.getConnection();
+            // 創建語句對象
+            ps = conn.prepareStatement(sql);        
+	        	        
+	        ps.setString(1, b.getName());
+	        ps.setString(2, b.getAuthor());
+	        ps.setInt(3, b.getPublishYear());
+	        ps.setString(4, b.getIsbn());
+	        ps.setInt(5, b.getAmount());
+	        ps.setString(6, b.getPublisher());
+	        ps.setString(7, b.getID());
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+        	DBUtils.close(conn, ps, null);
+        }
 		
 	}
 
@@ -74,7 +98,13 @@ public class DAOBookImpl implements DAOData<Book>{
             // 執行SQL語句
             rs = ps.executeQuery();
             while(rs.next()) {
-                Book book = new Book(rs.getString("b_id"),rs.getString("b_name"),rs.getString("author"),rs.getInt("pubyear"),rs.getString("publisher"),rs.getString("isbn"),rs.getInt("amount"));
+                Book book = new Book(rs.getString("b_id"),
+                		rs.getString("b_name"),
+                		rs.getString("author"),
+                		rs.getInt("pubyear"),
+                		rs.getString("publisher"),
+                		rs.getString("isbn"),
+                		rs.getInt("amount"));
                 list.add(book);
             }
         } catch (Exception e) {

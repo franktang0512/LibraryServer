@@ -41,7 +41,7 @@ public class DAOHistoryImpl implements DAOData<History>{
 	        ps.setString(3, history.getBid());
 	        ps.setDate(4, (Date) history.getBorrowDay());
 	        ps.setDate(5, (Date) history.getReturnDay());
-
+	        ps.executeUpdate();
 	        
 	    } catch (Exception e) {
 	        e.printStackTrace();
@@ -95,8 +95,8 @@ public class DAOHistoryImpl implements DAOData<History>{
             while(rs.next()) {
             	History history = new History();
             	history.setHid(rs.getString("chech_id"));
-            	history.setBid(rs.getString("user_id"));
-            	history.setUid(rs.getString("book_id"));
+            	history.setBid(rs.getString("book_id"));
+            	history.setUid(rs.getString("user_id"));
             	history.setBorrowDay(rs.getDate("start_date"));
             	history.setReturnDay(rs.getDate("end_date"));
                 list.add(history);

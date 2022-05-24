@@ -103,37 +103,48 @@ public class Controller {
 		JSONObject responseJson=null;
 		String book_id =  object.getString("book_id");
 		String account =  object.getString("account");
-		System.out.println("zxcvbnm,");
+		
 		User u =libmodel.getUserByAcc(account);
 		if(u==null) {
 			responseJson = new JSONObject("{\"status\":\"fail\",\"message\":\"not a member\"}");
 			return responseJson;
 		}
-		System.out.println("zxcvbnm,qwertyuio");
 		long now = System.currentTimeMillis();
 		Date sqlDate = new Date(now);
 		History history = new History();
 		history.setBid(book_id);
+//		System.out.println(history.getBid());
 		history.setUid(u.getId());
+//		System.out.println(history.getUid());
 		history.setBorrowDay(sqlDate);
+//		System.out.println(history.getBorrowDay());
 		libmodel.takeOutBook(history);
+
 		responseJson = new JSONObject("{\"status\":\"successful\"}");
 		return responseJson;
 	}
 	public JSONObject returnBook(JSONObject object) {
 		JSONObject responseJson=null;
 		String book_id =  object.getString("book_id");
-		String account =  object.getString("account");
+		String account =  object.getString("account");		
 		User u =libmodel.getUserByAcc(account);
+		if(u==null) {
+			responseJson = new JSONObject("{\"status\":\"fail\",\"message\":\"not a member\"}");
+			return responseJson;
+		}
+		
 		Book b = new Book();
 		b.setID(book_id);
 		History h = libmodel.getHistroy(u, b);
-		//TODO:search for the null end date and 
 		
-		java.util.Date now = new java.util.Date();
-		java.sql.Date sqlDate = new java.sql.Date(now.getTime());
+		long now = System.currentTimeMillis();
+//		System.out.println(now);
+		Date sqlDate = new Date(now);
+//		System.out.println(sqlDate);
 		h.setReturnDay(sqlDate);
+//		System.out.println("h.getReturnDay());
 		libmodel.putBackBook(h);
+		
 		
 		responseJson = new JSONObject("{\"status\":\"successful\"}");
 		return responseJson;
