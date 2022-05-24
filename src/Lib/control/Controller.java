@@ -1,6 +1,7 @@
 package Lib.control;
 
 import java.sql.Date;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 //import java.util.Date;
@@ -160,17 +161,151 @@ public class Controller {
 //		return responseJson;
 //	}
 	//TODO:借閱紀錄查詢
-	public JSONObject lookupHistoryByBook(JSONObject object) {
+	public JSONObject lookupBookHistory(JSONObject object) {
 		JSONObject responseJson=null;
 		String book_id =  object.getString("book_id");
 		Book b = new Book();
 		b.setID(book_id);
-		libmodel.getBookHistroy(b);
+//		System.out.println("========0=======");
+		ArrayList<History> hislist = (ArrayList<History>) libmodel.getBookHistroy(b);
+//		System.out.println("========1=======");
+		//TODO:寫成JSON
+		if(hislist.size()==0) {
+			return new JSONObject("{\"status\":\"fail\",\"message\":\"none of the record\"");
+		}
+//		System.out.println("========2=======");
+		String s ="";
+		for(int i =0;i<hislist.size();i++) {
+			History h =  hislist.get(i);
+			String uid = h.getUid();
+//			System.out.println("========3=======");
+			User u = libmodel.getUserByID(uid);
+//			System.out.println("========4=======");
+			String username = u.getName();
+			String useracc = u.getAccount();
+			Date borrowdate =h.getBorrowDay();
+			Date returndate = h.getReturnDay();
+			
+			s+="{\"account\":\""+useracc+"\",\"name\":\""+username+"\",\"borrow_date\":\""+(borrowdate!=null?borrowdate.toString():null)+"\",\"return_date\":\""
+			+(returndate!=null?returndate.toString():null)+"\"}";
+			if(i!=hislist.size()-1) {
+				s+=",";
+			}
+//			System.out.println("========6=======");
+		}
+//		System.out.println("========7=======");
 
-		
+		String hisstring="{\"status\":\"successful\",\"histories\":["+s+"]}";
+		responseJson = new JSONObject(hisstring);
 		
 		return responseJson;
 	}
+	public JSONObject lookupUserHistory(JSONObject object) {
+		JSONObject responseJson=null;
+		String account =  object.getString("account");
+		User u = libmodel.getUserByAcc(account);
+		ArrayList<History> hislist = (ArrayList<History>) libmodel.getUserHistroy(u);
+		//TODO:寫成JSON
+		
+//		System.out.println("========1=======");
+		//TODO:寫成JSON
+		if(hislist.size()==0) {
+			return new JSONObject("{\"status\":\"fail\",\"message\":\"none of the record\"");
+		}
+//		System.out.println("========2=======");
+		String s ="";
+		for(int i =0;i<hislist.size();i++) {
+			History h =  hislist.get(i);
+			String bid = h.getBid();
+//			System.out.println("========3=======");
+			Book b = libmodel.getBookByID(bid);
+//			System.out.println("========4=======");
+			String username = u.getName();
+			String useracc = u.getAccount();
+			Date borrowdate =h.getBorrowDay();
+			Date returndate = h.getReturnDay();
+			
+			s+="{\"book\":\""+username+"\",\"borrow_date\":\""+(borrowdate!=null?borrowdate.toString():null)+"\",\"return_date\":\""
+			+(returndate!=null?returndate.toString():null)+"\"}";
+			if(i!=hislist.size()-1) {
+				s+=",";
+			}
+//			System.out.println("========6=======");
+		}
+//		System.out.println("========7=======");
+
+		String hisstring="{\"status\":\"successful\",\"histories\":["+s+"]}";
+		responseJson = new JSONObject(hisstring);
+		
+		return responseJson;
+
+	}
+	
+	public JSONObject modifyMember(JSONObject object) {
+		JSONObject responseJson=null;
+		String acc =  object.getString("acc");//?
+		User u = libmodel.getUserByAcc(acc);
+		try {			
+			String name =  object.getString("name");
+			u.setName(name);
+		}catch(Exception e) {}
+		
+		try {			
+			int sex =  object.getInt("sex");
+			u.setSex(sex);
+
+		}catch(Exception e) {}
+		try {			
+			String birth =  object.getString("birth");
+			try {
+		        SimpleDateFormat formatter1=new SimpleDateFormat("yyyy-MM-dd");
+		        java.util.Date bd=null;
+				bd = formatter1.parse(birth);
+		        long timeInMilliSeconds = bd.getTime();
+		        Date date = new Date(timeInMilliSeconds); 
+				u.setBirthday(date);
+			} catch (ParseException e) {
+				responseJson= new JSONObject("{\"status\":\"fail\"}");
+			}
+		}catch(Exception e) {}
+		try {			
+			String email =  object.getString("email");
+			u.setEmail(email);
+		}catch(Exception e) {}
+		try {			
+			String address =  object.getString("address");
+			u.setAddress(address);
+		}catch(Exception e) {}
+		try {			
+			String phone =  object.getString("phone");
+			u.setPhone(phone);
+		}catch(Exception e) {}
+		try {			
+			int kind =  object.getInt("kind");//?
+			u.setKind(kind);
+		}catch(Exception e) {}
+		try {			
+			int enable =  object.getInt("enable");//?
+			u.setEnable(enable);
+
+		}catch(Exception e) {}
+		try {			
+			String psd =  object.getString("psd");
+			u.setPassword(psd);
+		}catch(Exception e) {}
+		
+		libmodel.updateUser(u);
+		
+
+		responseJson= new JSONObject("{\"status\":\"successful\"}");
+		return responseJson;
+		
+	}
+	
+	
+
+	
+	
 	
 	public String commandHandle(String inputLine) {
 		System.out.println("the requeset:"+inputLine);
@@ -197,22 +332,29 @@ public class Controller {
 				respond=lookupBook(object).toString();
 				break;
 			case "lookupByBook":
-				respond=enroll(object).toString();
+//				respond=lookupByBook(object).toString();
 				break;
 			case "lookupByAuthor":
-				respond=enroll(object).toString();
+//				respond=enroll(object).toString();
 				break;
 			case "lookupBookHistory":
-				respond=enroll(object).toString();
+				//那本書的借閱者記錄
+				respond=lookupBookHistory(object).toString();
 				break;
 			case "lookupUserHistory":
-				respond=enroll(object).toString();
+				//借閱者借過書的記錄
+				respond=lookupUserHistory(object).toString();
+				break;				
+			case "modifyMember":
+				respond=modifyMember(object).toString();
 				break;
+				
+				
 			default:
 				respond = "{\"status\":\"Not Yet\"}";
 		
 		}
 		return respond;
 	}
-//	public Response commandHandle(String s) {}
+
 }

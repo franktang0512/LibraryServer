@@ -57,6 +57,16 @@ public class LibModel {
 	public List<User> getAllUsers() {
 		return users;
 	}
+	
+	public User getUserByID(String uid) {
+		User user=null;
+		for (User u : users) {
+			  if(u.getId().equals(uid)) {
+				  user =u;
+			  }
+		}	
+		return user;
+	}
 	public User getUserByAcc(String acc) {		
 		User user=null;
 		for (User u : users) {
@@ -78,6 +88,16 @@ public class LibModel {
 	//TODO:建立Book資料處裡函式
 	public List<Book> getAllBooks(){
 		return books;
+	}
+	public Book getBookByID(String bid){
+		Book book=null;
+		for (Book b : books) {
+			  if(b.getID().equals(bid)) {
+				  book =b;
+			  }
+		}	
+		return book;
+		
 	}
 	public List<Book> getSearchBooks(String keyword){
 
@@ -124,9 +144,22 @@ public class LibModel {
 	
 	
 	public synchronized List<History> getBookHistroy(Book b) {
-		ArrayList<History> his=null;
+		ArrayList<History> his=new ArrayList<History>();
+//		System.out.println("========0=======");
 		for(History h:histories) {
+//			System.out.println("========1======="+h.getBid()+h.getBid().equals(b.getID()));
 			if(h.getBid().equals(b.getID())) {
+				his.add(h);				
+			}			
+		}		
+		
+		return his;
+	}
+	//not yet
+	public synchronized List<History> getUserHistroy(User u) {
+		ArrayList<History> his=new ArrayList<History>();
+		for(History h:histories) {
+			if(h.getUid().equals(u.getId())) {
 				his.add(h);				
 			}			
 		}		
