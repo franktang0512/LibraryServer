@@ -18,7 +18,9 @@ public class main {
 		PrintWriter out;
 		BufferedReader in;
 //		String sss="{\"cmd\":\"login\",\"account\":\"libadmin\",\"psd\":\"libadmin\"}";
-		String sss="{\"cmd\":\"lookupBook\",\"keyword\":\"ep\"}";
+//		String sss="{\"cmd\":\"lookupBook\",\"keyword\":\"ep\"}";
+		String sss="{\"cmd\":\"enroll\",\"name\":\"Flora\",\"sex\":2,\"birth\":\"1990-2-3\",\"email\":\"floara@ntnu.edu.tw\",\"address\":\"Taipei\","
+				+ "\"phone\":\"0900053322\",\"account\":\"florauser\",\"psd\":\"florahavefun\",\"kind\":2}";
 		
 //		String sss="{"+"\"cmd\":\"login\","+"\"account\":\"abc\","+"\"psd\":\"123\"}";
 		out = new PrintWriter(echoSocket.getOutputStream(),true);

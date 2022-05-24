@@ -31,8 +31,8 @@ public class Controller {
 	        user.setSex(object.getInt("sex"));
 	        user.setKind(object.getInt("kind"));
 	        //處理java util sql date差異問題 這裡統一用sql的date
-	        SimpleDateFormat formatter1=new SimpleDateFormat("dd-MMM-yyyy");
-	        Date bd=formatter1.parse(object.getString("date"));
+	        SimpleDateFormat formatter1=new SimpleDateFormat("yyyy-MM-dd");
+	        Date bd=formatter1.parse(object.getString("birth"));
 	        long timeInMilliSeconds = bd.getTime();
 	        java.sql.Date date = new java.sql.Date(timeInMilliSeconds); 
 	        
@@ -49,7 +49,8 @@ public class Controller {
 			
 		}
 		catch(Exception e) {
-			responseJson = new JSONObject("{\"status\":\"fail\"}");			
+			responseJson = new JSONObject("{\"status\":\"fail\"}");	
+			System.out.print(e.toString());
 		}
 		return responseJson;
 		
@@ -138,6 +139,18 @@ public class Controller {
 //		
 //		return responseJson;
 //	}
+	//TODO:借閱紀錄查詢
+	public JSONObject lookupHistoryByBook(JSONObject object) {
+		JSONObject responseJson=null;
+		String book_id =  object.getString("book_id");
+		Book b = new Book();
+		b.setID(book_id);
+		libmodel.getBookHistroy(b);
+
+		
+		
+		return responseJson;
+	}
 	
 	public String commandHandle(String inputLine) {
 		System.out.println("the requeset:"+inputLine);

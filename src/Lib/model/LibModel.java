@@ -117,7 +117,15 @@ public class LibModel {
 	//TODO:­É¾\¬ö¿ý
 	
 	
-	
+	public synchronized List<History> getBookHistroy(Book b) {
+		ArrayList<History> his=null;
+		for(History h:histories) {
+			if(h.getBid().equals(b.getID())) {
+				his.add(h);				
+			}			
+		}		
+		return his;
+	}
 	public synchronized History getHistroy(User u, Book b) {
 		History his=null;
 		for(History h:histories) {
