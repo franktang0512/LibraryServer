@@ -110,6 +110,11 @@ public class Controller {
 			responseJson = new JSONObject("{\"status\":\"fail\",\"message\":\"not a member\"}");
 			return responseJson;
 		}
+		Book b = libmodel.getBookByID(book_id);
+		if(b.getAmount()==0) {
+			responseJson = new JSONObject("{\"status\":\"fail\",\"message\":\"no stock, refresh the page to see more\"}");
+			return responseJson;
+		}
 		long now = System.currentTimeMillis();
 		Date sqlDate = new Date(now);
 		History history = new History();
