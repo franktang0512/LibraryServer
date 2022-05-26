@@ -6,10 +6,12 @@ public class Recommend {
 	private String recommend_id;
 	private String u_id;
     private String bookinfo;
+    private int censored;
     public Recommend() {}
-    public Recommend(String u_id, String bookinfo) {
+    public Recommend(String u_id, String bookinfo,int censor) {
 		this.u_id = u_id;
 		this.bookinfo = bookinfo;
+		this.censored = censor;
     }
     
     public String getRecommendID() {
@@ -30,6 +32,13 @@ public class Recommend {
     }
 	public void setBookInfo(String s) {
 		bookinfo = s;
+    }
+	
+	public int getCensored() {
+    	return censored;
+    }
+	public void setCensored(int s) {
+		censored = s;
     }
 
 }

@@ -16,7 +16,7 @@ public class DAORecommendImpl implements DAOData<Recommend>{
 	@Override
 	public void save(Recommend recommend) {
 		String sql_count = "select count(*) from lib_recommend";
-	    String sql_insert = "INSERT INTO lib_recommend(recommend_id,uid,bookinfo) VALUES(?,?,?)";
+	    String sql_insert = "INSERT INTO lib_recommend(recommend_id,uid,bookinfo,censored) VALUES(?,?,?,?)";
 	    Connection conn = null;
 	    PreparedStatement ps = null;
 	    ResultSet rs = null;
@@ -38,6 +38,7 @@ public class DAORecommendImpl implements DAOData<Recommend>{
 	        ps.setString(1, recommend_id);
 	        ps.setString(2, recommend.getUserID());
 	        ps.setString(3, recommend.getBookInfo());
+	        ps.setInt(4, recommend.getCensored());
 	        ps.executeUpdate();
 	        
 	    } catch (Exception e) {
@@ -51,7 +52,7 @@ public class DAORecommendImpl implements DAOData<Recommend>{
 	@Override
 	public void update(Recommend recommend) {
         String sql = "UPDATE lib_recommend "
-        		+ "SET uid=?,bookinfo=? "
+        		+ "SET uid=?,bookinfo=?,censored=? "
         		+ "WHERE recommend_id=?";
         
         
@@ -65,6 +66,7 @@ public class DAORecommendImpl implements DAOData<Recommend>{
 	        ps.setString(1, recommend.getUserID());
 	        ps.setString(2, recommend.getBookInfo());
 	        ps.setString(3, recommend.getRecommendID());
+	        ps.setInt(4, recommend.getCensored());
 
             ps.executeUpdate();
         } catch (Exception e) {
@@ -93,6 +95,7 @@ public class DAORecommendImpl implements DAOData<Recommend>{
             	recommend.setRecommendID(rs.getString("recommend_id"));
             	recommend.setUserID(rs.getString("uid"));
             	recommend.setBookInfo(rs.getString("bookinfo"));
+            	recommend.setCensored(rs.getInt("censored"));
                 list.add(recommend);
             }
         } catch (Exception e) {
