@@ -31,7 +31,7 @@ public class Controller {
 	        user.setAccount(object.getString("account"));
 	        user.setPassword(object.getString("psd"));
 	        user.setSex(object.getInt("sex"));
-	        user.setKind(object.getInt("kind"));
+	        user.setKind(1);
 	        //處理java util sql date差異問題 這裡統一用sql的date
 	        SimpleDateFormat formatter1=new SimpleDateFormat("yyyy-MM-dd");
 	        java.util.Date bd=formatter1.parse(object.getString("birth"));
@@ -89,14 +89,19 @@ public class Controller {
 		
 		for(int i =0;i<books.size();i++) {
 			
-			booksstring+="{\"bookname\":\""+books.get(i).getName()+"\"}";
+			booksstring+="{\"book_id\":\""+books.get(i).getID()+"\",\"book_name\":\""+books.get(i).getName()+"\","
+					+ "\"author\":\""+books.get(i).getAuthor()+"\",\"publishedYear\":"+books.get(i).getPublishYear()+","
+							+ "\"publisher\":\""+books.get(i).getPublisher()+"\",\"isbn\":\""+books.get(i).getIsbn()+"\","
+									+ "\"quantity\":"+books.get(i).getAmount()+"}";
 			if(!(i==books.size()-1)) {
 				booksstring+=",";
 			}			
 		}
+		
 //		System.out.println("booksstring:"+booksstring);
 		booksstring="{\"status\":\"successful\",\"books\":["+booksstring+"]}";
 		responseJson= new JSONObject(booksstring);
+//		System.out.println(responseJson.toString());
 		return responseJson;
 	}
 	
