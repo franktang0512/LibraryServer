@@ -107,7 +107,7 @@ public class LibModel {
 		
 		for(int j=0;j<bookcount;j++)
 		{
-			if(this.books.get(j).getName().indexOf(keyword)!=-1){
+			if((this.books.get(j).getName().indexOf(keyword)!=-1)||(this.books.get(j).getAuthor().indexOf(keyword)!=-1)){
 				similar_string_book.add(this.books.get(j));
 			}
 		}
@@ -118,7 +118,7 @@ public class LibModel {
 		return similar_string_book;
 
 	}
-	public synchronized void addBook(Book b) {
+	public synchronized void addBook(Book b,int add_amount) {
 		//如果已經有了只要數量++
 //		System.out.println(b.getID());
 		boolean exist=false;
@@ -128,7 +128,7 @@ public class LibModel {
 //			System.out.println(b.getID().equals(book.getID()))			
 			if(/*b.getIsbn().equals(book.getIsbn())||*/b.getID().equals(book.getID())) {				
 //				System.out.println(book.getAmount());
-				book.setAmount(book.getAmount()+1);
+				book.setAmount(book.getAmount()+add_amount);
 //				System.out.println(book.getAmount());				
 				exist=true;
 				bookDAO.update(book);
@@ -136,6 +136,7 @@ public class LibModel {
 		}
 		//不存在才要加入
 		if(!exist) {
+			b.setAmount(add_amount);
 			bookDAO.save(b);			
 		}
 		updateModel();		
@@ -201,8 +202,14 @@ public class LibModel {
 	public synchronized void putBackBook(History h) {
 		Book b = new Book();
 		b.setID(h.getBid());		
-		addBook(b);
+		addBook(b,1);
 		historyDAO.update(h);
+		updateModel();
+	}
+
+
+	public synchronized void updateBook(Book b) {	
+		bookDAO.update(b);
 		updateModel();
 	}
 
