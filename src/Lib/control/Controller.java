@@ -26,8 +26,6 @@ public class Controller {
 	public JSONObject enroll(JSONObject object) {
 		JSONObject responseJson=null;
 		try {
-
-
 	        User existed_user = libmodel.getUserByAcc(object.getString("account"));
 	        if(existed_user==null) {
 		        User user = new User();
@@ -51,11 +49,7 @@ public class Controller {
 		        responseJson = new JSONObject("{\"status\":\"successful\"}");
 	        }else {
 	        	responseJson = new JSONObject("{\"status\":\"fail\",\"msg\":\"This account is not available.\"}");
-	        }
-	        
-	        
-	        
-	        
+	        }	        
 			
 		}
 		catch(Exception e) {
