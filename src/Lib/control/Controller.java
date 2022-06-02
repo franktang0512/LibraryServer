@@ -26,28 +26,36 @@ public class Controller {
 	public JSONObject enroll(JSONObject object) {
 		JSONObject responseJson=null;
 		try {
-	        User user = new User();
-	        user.setName(object.getString("name"));
-	        user.setAccount(object.getString("account"));
-	        user.setPassword(object.getString("psd"));
-	        user.setSex(object.getInt("sex"));
-	        user.setKind(1);
-	        //處理java util sql date差異問題 這裡統一用sql的date
-	        SimpleDateFormat formatter1=new SimpleDateFormat("yyyy-MM-dd");
-	        java.util.Date bd=formatter1.parse(object.getString("birth"));
-	        long timeInMilliSeconds = bd.getTime();
-	        Date date = new Date(timeInMilliSeconds); 
-	        
-	        
-	        user.setBirthday(date);
-	        user.setEmail(object.getString("email"));
-	        user.setPhone(object.getString("phone"));
-	        user.setAddress(object.getString("address"));
 
-	        libmodel.addUser(user);
+
+	        User existed_user = libmodel.getUserByAcc(object.getString("account"));
+	        if(existed_user==null) {
+		        User user = new User();
+		        user.setName(object.getString("name"));
+		        user.setAccount(object.getString("account"));
+		        user.setPassword(object.getString("psd"));
+		        user.setSex(object.getInt("sex"));
+		        user.setKind(1);
+		        //處理java util sql date差異問題 這裡統一用sql的date
+		        SimpleDateFormat formatter1=new SimpleDateFormat("yyyy-MM-dd");
+		        java.util.Date bd=formatter1.parse(object.getString("birth"));
+		        long timeInMilliSeconds = bd.getTime();
+		        Date date = new Date(timeInMilliSeconds); 
+		        
+		        
+		        user.setBirthday(date);
+		        user.setEmail(object.getString("email"));
+		        user.setPhone(object.getString("phone"));
+		        user.setAddress(object.getString("address"));
+		        libmodel.addUser(user);
+		        responseJson = new JSONObject("{\"status\":\"successful\"}");
+	        }else {
+	        	responseJson = new JSONObject("{\"status\":\"fail\",\"msg\":\"This account is not available.\"}");
+	        }
 	        
 	        
-	        responseJson = new JSONObject("{\"status\":\"successful\"}");
+	        
+	        
 			
 		}
 		catch(Exception e) {
