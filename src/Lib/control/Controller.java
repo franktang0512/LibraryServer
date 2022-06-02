@@ -48,7 +48,7 @@ public class Controller {
 		        libmodel.addUser(user);
 		        responseJson = new JSONObject("{\"status\":\"successful\"}");
 	        }else {
-	        	responseJson = new JSONObject("{\"status\":\"fail\",\"msg\":\"This account is not available.\"}");
+	        	responseJson = new JSONObject("{\"status\":\"fail\",\"msg\":\"This account is existed.\"}");
 	        }	        
 			
 		}

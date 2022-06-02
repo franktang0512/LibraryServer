@@ -13,12 +13,12 @@ public class main {
 
 	public static void main(String[] args) throws UnknownHostException, IOException {
 		// TODO Auto-generated method stub
-		Socket echoSocket=new Socket("140.122.184.121",10234);
-//		Socket echoSocket=new Socket("127.0.0.1",10234);
+//		Socket echoSocket=new Socket("140.122.184.121",10234);
+		Socket echoSocket=new Socket("127.0.0.1",10234);
 		PrintWriter out;
 		BufferedReader in;
-//		String sss="{\"cmd\":\"login\",\"account\":\"libadmin\",\"psd\":\"libadmin\"}";
-		String sss="{\"cmd\":\"lookupBook\",\"keyword\":\"lea\"}";
+		String sss="{\"cmd\":\"login\",\"account\":\"zzz123\",\"psd\":\"zzz123\"}";
+//		String sss="{\"cmd\":\"lookupBook\",\"keyword\":\"lea\"}";
 //		String sss="{\"cmd\":\"enroll\",\"name\":\"Flora\",\"sex\":2,\"birth\":\"1990-2-3\",\"email\":\"floara@ntnu.edu.tw\",\"address\":\"Taipei\","
 //				+ "\"phone\":\"0900053322\",\"account\":\"florauser\",\"psd\":\"florahavefun\",\"kind\":2}";
 		

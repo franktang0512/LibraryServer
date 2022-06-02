@@ -94,10 +94,10 @@ public class User {
     }
 	
 	public int getEnable() {
-    	return sex;
+    	return enable;
     }
 	public void setEnable(int s) {
-		sex = s;
+		enable = s;
     }
 
 
