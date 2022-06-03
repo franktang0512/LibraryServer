@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import Lib.model.LibModel;
 import Lib.model.data.Book;
 import Lib.model.data.History;
+import Lib.model.data.Reservation;
 import Lib.model.data.User;
 
 public class Controller {
@@ -238,18 +239,22 @@ public class Controller {
 
 	public JSONObject modifyMember(JSONObject object) {
 		JSONObject responseJson=null;
-		String acc =  object.getString("acc");//?
+		System.out.println("===========0=============");
+		String acc =  object.getString("account");//?
+		System.out.println("===========1=============");
 		User u = libmodel.getUserByAcc(acc);
+		System.out.println("===========2=============");
 		try {			
 			String name =  object.getString("name");
 			u.setName(name);
 		}catch(Exception e) {}
-		
+		System.out.println("===========3=============");
 		try {			
 			int sex =  object.getInt("sex");
 			u.setSex(sex);
 
 		}catch(Exception e) {}
+		System.out.println("===========4=============");
 		try {			
 			String birth =  object.getString("birth");
 			try {
@@ -263,31 +268,38 @@ public class Controller {
 				responseJson= new JSONObject("{\"status\":\"fail\"}");
 			}
 		}catch(Exception e) {}
+		System.out.println("===========5=============");
 		try {			
 			String email =  object.getString("email");
 			u.setEmail(email);
 		}catch(Exception e) {}
+		System.out.println("===========6=============");
 		try {			
 			String address =  object.getString("address");
 			u.setAddress(address);
 		}catch(Exception e) {}
+		System.out.println("===========7=============");
 		try {			
 			String phone =  object.getString("phone");
 			u.setPhone(phone);
 		}catch(Exception e) {}
+		System.out.println("===========8=============");
 		try {			
 			int kind =  object.getInt("kind");//?
 			u.setKind(kind);
 		}catch(Exception e) {}
+		System.out.println("===========9=============");
 		try {			
 			int enable =  object.getInt("enable");//?
 			u.setEnable(enable);
 
 		}catch(Exception e) {}
+		System.out.println("===========10=============");
 		try {			
 			String psd =  object.getString("psd");
 			u.setPassword(psd);
 		}catch(Exception e) {}
+		System.out.println("===========11=============");
 		
 		libmodel.updateUser(u);
 		
@@ -438,6 +450,28 @@ public class Controller {
 		responseJson = new JSONObject("{\"status\":\"successful\"}");
 		return responseJson;
 	}
+	//TODO:
+	public JSONObject reserve(JSONObject object) {
+		JSONObject responseJson=null;
+		String book_id =  object.getString("book_id");
+		String account =  object.getString("account");
+		User u = libmodel.getUserByAcc(account);
+		Book b = libmodel.getBookByID(book_id);
+		
+		Reservation reserve = new Reservation();
+		reserve.setBid(b.getID());
+		reserve.setUid(u.getId());
+		long now = System.currentTimeMillis();
+		Date sqlDate = new Date(now);
+		reserve.setReserveDay(sqlDate);
+		reserve.setIsFinished(0);
+		libmodel.addReserve(reserve);
+		
+		responseJson = new JSONObject("{\"status\":\"successful\"}");
+		return responseJson;
+	}
+	
+	
 //	public JSONObject returnBook(JSONObject object) {
 //	JSONObject responseJson=null;
 //	String book_id =  object.getString("book_id");
@@ -504,8 +538,10 @@ public class Controller {
 				respond=lookupUserHistory(object).toString();
 				break;	
 			case "forget":
-
 				respond=forget(object).toString();
+				break;	
+			case "reserve":
+				respond=reserve(object).toString();
 				break;	
 				
 				

@@ -212,7 +212,40 @@ public class LibModel {
 		bookDAO.update(b);
 		updateModel();
 	}
-
+	
+	public synchronized void addReserve(Reservation r) {	
+		resevationDAO.save(r);
+		updateModel();
+	}
+	//取消預約及拿到預約的書時用
+	public synchronized void setReserve(Reservation r) {	
+		resevationDAO.update(r);
+		updateModel();
+	}
+	//還沒有審核的推薦圖書清單
+	public List<Recommend> getNotCensoredRecommend(){
+		ArrayList<Recommend> rec=new ArrayList<Recommend>();
+		for(Recommend r:recommendations) {
+			if(r.getCensored()==0) {
+				rec.add(r);
+			}
+		}
+		if(rec.size()==0) {
+			return null;
+		}
+		
+		return rec;
+	}
+	//推薦圖書
+	public synchronized void addRecommend(Recommend r) {	
+		recommendationsDAO.save(r);
+		updateModel();
+	}
+	//審核圖書 沒過就設為2
+	public synchronized void censoredRecommend(Recommend r) {	
+		recommendationsDAO.update(r);
+		updateModel();
+	}
 	
 	
 	
