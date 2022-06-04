@@ -4,7 +4,9 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 //import java.util.Date;
+import java.util.Iterator;
 
 import org.json.JSONObject;
 
@@ -353,7 +355,7 @@ public class Controller {
 //		System.out.println("========1=======");
 		//TODO:寫成JSON
 		if(hislist.size()==0) {
-			return new JSONObject("{\"status\":\"fail\",\"message\":\"none of the record\"");
+			return new JSONObject("{\"status\":\"fail\",\"message\":\"none of the record\"}");
 		}
 //		System.out.println("========2=======");
 		String s ="";
@@ -392,7 +394,7 @@ public class Controller {
 //		System.out.println("========1=======");
 		//TODO:寫成JSON
 		if(hislist.size()==0) {
-			return new JSONObject("{\"status\":\"fail\",\"message\":\"none of the record\"");
+			return new JSONObject("{\"status\":\"fail\",\"message\":\"none of the record\"}");
 		}
 //		System.out.println("========2=======");
 		String s ="";
@@ -407,7 +409,7 @@ public class Controller {
 			Date borrowdate =h.getBorrowDay();
 			Date returndate = h.getReturnDay();
 			
-			s+="{\"book\":\""+username+"\",\"borrow_date\":\""+(borrowdate!=null?borrowdate.toString():null)+"\",\"return_date\":\""
+			s+="{\"book_id\":\""+b.getID()+"\",\"book_name\":\""+b.getName()+"\",\"borrow_date\":\""+(borrowdate!=null?borrowdate.toString():null)+"\",\"return_date\":\""
 			+(returndate!=null?returndate.toString():null)+"\"}";
 			if(i!=hislist.size()-1) {
 				s+=",";
@@ -457,7 +459,11 @@ public class Controller {
 		String account =  object.getString("account");
 		User u = libmodel.getUserByAcc(account);
 		Book b = libmodel.getBookByID(book_id);
-		
+		Reservation having_r = libmodel.getReserveByBookUser(b, u);
+		if(having_r!=null) {
+			responseJson = new JSONObject("{\"status\":\"fail\",\"msg\":\"you have a same book reserved already\"}");
+			return responseJson;
+		}
 		Reservation reserve = new Reservation();
 		reserve.setBid(b.getID());
 		reserve.setUid(u.getId());
@@ -472,15 +478,140 @@ public class Controller {
 	}
 	
 	
+	
+//////////////////////////////////////////////////////////////////////////////////////////////////	
+	public JSONObject cancelReserve(JSONObject object) {
+		JSONObject responseJson=null;
+		String book_id =  object.getString("book_id");
+		String account =  object.getString("account");
+		User u = libmodel.getUserByAcc(account);
+		Book b = libmodel.getBookByID(book_id);
+		
+		Reservation reserve = libmodel.getReserveByBookUser(b, u);
+		reserve.setIsFinished(1);
+		libmodel.setReserve(reserve);
+		
+		responseJson = new JSONObject("{\"status\":\"successful\"}");
+		return responseJson;
+	}
+	
+	
+	public JSONObject lookUpUserReserveBook(JSONObject object) {
+		JSONObject responseJson=null;
+		String account =  object.getString("account");
+		User u = libmodel.getUserByAcc(account);
+		ArrayList<Reservation> userreserve = (ArrayList<Reservation>)libmodel.getReserveByUser(u);
+		if(userreserve==null) {
+			responseJson = new JSONObject("{\"status\":\"fail\",\"msg\":\"no reservation so far\"}");
+			return responseJson;			
+		}
+		
+		ArrayList<Book> b = new ArrayList<Book>();
+		for(Reservation r:userreserve) {
+			b.add(libmodel.getBookByID(r.getBid()));
+		}
+		String booksstring = "";
+		for(int i =0;i<b.size();i++) {
+			
+			booksstring+="{\"book_id\":\""+b.get(i).getID()+"\",\"book_name\":\""+b.get(i).getName()+"\","
+					+ "\"author\":\""+b.get(i).getAuthor()+"\",\"publishedYear\":"+b.get(i).getPublishYear()+","
+							+ "\"publisher\":\""+b.get(i).getPublisher()+"\",\"isbn\":\""+b.get(i).getIsbn()+"\","
+									+ "\"quantity\":"+b.get(i).getAmount()+"}";
+			if(!(i==b.size()-1)) {
+				booksstring+=",";
+			}			
+		}
+		booksstring="{\"status\":\"successful\",\"books\":["+booksstring+"]}";
+		responseJson= new JSONObject(booksstring);
+//		System.out.println(responseJson.toString());
+		return responseJson;
+	}
+	
+	
+	//=============================================
+	public JSONObject bookShouldReturnDay(JSONObject object) {
+		JSONObject responseJson=null;
+		String book_id =  object.getString("book_id");
+		Book b = libmodel.getBookByID(book_id);
+		ArrayList<History> bookhis =(ArrayList<History>) libmodel.getBookHistroy(b);		
+		Iterator itr = bookhis.iterator();
+        while (itr.hasNext()) {
+        	  
+            // Remove elements smaller than 10 using
+            // Iterator.remove()
+        	History h = (History) itr.next();
+//            int x = (Integer)itr.next();
+            if (h.getReturnDay()!=null) {
+            	itr.remove();
+            }
+                
+        }
+        Date d=null;
+		long now = System.currentTimeMillis();
+		d = new Date(now);
+        for(History h : bookhis) {
+        	Date borrowday = h.getBorrowDay();
+
+        	if(borrowday.before(d)) {
+        		d=borrowday;
+        	}
+        }
+        
+        Calendar c = Calendar.getInstance();
+        c.setTime(d);
+        c.add(Calendar.DATE, 30);
+        d = new Date(c.getTimeInMillis());
+		
+        responseJson = new JSONObject("{\"status\":\"successful\",\"date\":\""+d+"\"}");		
+		return responseJson;
+	}
+	public JSONObject recommendBook(JSONObject object) {
+		JSONObject responseJson=null;
+		String book_id =  object.getString("book_id");
+		String account =  object.getString("account");
+		History history = new History();
+		
+		
+		return responseJson;
+	}
+	public JSONObject lookUpRecommendBook(JSONObject object) {
+		JSONObject responseJson=null;
+		String book_id =  object.getString("book_id");
+		String account =  object.getString("account");
+		History history = new History();
+		
+		
+		return responseJson;
+	}
+	public JSONObject censorRecommendBook(JSONObject object) {
+		JSONObject responseJson=null;
+		String book_id =  object.getString("book_id");
+		String account =  object.getString("account");
+		History history = new History();
+		
+		
+		return responseJson;
+	}
+	public JSONObject getAllCensorRecommendBook(JSONObject object) {
+		JSONObject responseJson=null;
+		String book_id =  object.getString("book_id");
+		String account =  object.getString("account");
+		History history = new History();
+		
+		
+		return responseJson;
+	}
+
 //	public JSONObject returnBook(JSONObject object) {
-//	JSONObject responseJson=null;
-//	String book_id =  object.getString("book_id");
-//	String account =  object.getString("account");
-//	History history = new History();
-//	
-//	
-//	return responseJson;
-//}
+//		JSONObject responseJson=null;
+//		String book_id =  object.getString("book_id");
+//		String account =  object.getString("account");
+//		History history = new History();
+//		
+//		
+//		return responseJson;
+//	}
+
 	
 
 	public String commandHandle(String inputLine) {
@@ -540,9 +671,40 @@ public class Controller {
 			case "forget":
 				respond=forget(object).toString();
 				break;	
+//////////////////////////////////////////////////////////////
 			case "reserve":
 				respond=reserve(object).toString();
 				break;	
+
+			case "cancelReserve":
+				respond=cancelReserve(object).toString();
+				break;	
+			case "lookUpUserReserveBook":
+				respond=lookUpUserReserveBook(object).toString();
+				break;	
+				
+			case "bookShouldReturnDay":
+				respond=bookShouldReturnDay(object).toString();
+				break;	
+				
+			case "recommendBook":
+				respond=recommendBook(object).toString();
+				break;
+				
+			case "lookUpRecommendBook":
+				respond=lookUpRecommendBook(object).toString();
+				break;
+				
+			case "censorRecommendBook":
+				respond=censorRecommendBook(object).toString();
+				break;
+				
+			case "getAllCensorRecommendBook":
+				respond=getAllCensorRecommendBook(object).toString();
+				break;
+				
+			//more 管理員發布訊息
+				
 				
 				
 			default:

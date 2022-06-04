@@ -217,6 +217,24 @@ public class LibModel {
 		resevationDAO.save(r);
 		updateModel();
 	}
+	public List<Reservation> getReserveByUser(User u) {	
+		List<Reservation> reserve=null;
+		for (Reservation r : resevations) {
+			  if(u.getId().equals(r.getUid())&&r.getIsFinished()==0) {
+				  reserve.add(r);
+			  }
+		}	
+		return reserve;
+	}
+	public Reservation getReserveByBookUser(Book b,User u) {	
+		Reservation reserve=null;
+		for (Reservation r : resevations) {
+			  if(u.getId().equals(r.getUid())&&b.getID().equals(r.getBid())&&r.getIsFinished()==0) {
+				  reserve =r;
+			  }
+		}	
+		return reserve;
+	}
 	//取消預約及拿到預約的書時用
 	public synchronized void setReserve(Reservation r) {	
 		resevationDAO.update(r);
@@ -246,6 +264,10 @@ public class LibModel {
 		recommendationsDAO.update(r);
 		updateModel();
 	}
+	
+
+
+
 	
 	
 	
