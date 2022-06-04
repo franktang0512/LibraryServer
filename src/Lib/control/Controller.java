@@ -452,12 +452,12 @@ public class Controller {
 		User u = libmodel.getUserByAcc(account);
 		String s ="{\"status\":\"successful\","
 				+ "	\"name\":\""+u.getName()+"\","
-				+ "	\"sex\":\""+u.getName()+"\","
-				+ "	\"birth\":\""+u.getName()+"\","
-				+ "	\"email\":\""+u.getName()+"\","
-				+ "	\"address\":\""+u.getName()+"\","
-				+ "	\"phone\":\""+u.getName()+"\","
-				+ "	\"account\":\""+u.getName()+"\",}";
+				+ "	\"sex\":\""+u.getSex()+"\","
+				+ "	\"birth\":\""+u.getBirthday()+"\","
+				+ "	\"email\":\""+u.getEmail()+"\","
+				+ "	\"address\":\""+u.getAddress()+"\","
+				+ "	\"phone\":\""+u.getPhone()+"\","
+				+ "	\"account\":\""+u.getAccount()+"\",}";
 		
 		responseJson = new JSONObject(s);
 		return responseJson;
@@ -674,7 +674,10 @@ public class Controller {
 //		
 //		return responseJson;
 //	}
-
+	//預約者在書還回後3天內會保留，取消超過3天的預約
+	public void checkReserver3Days() {
+		
+	}
 	
 
 	public String commandHandle(String inputLine) {

@@ -33,8 +33,8 @@ public class main {
 //		String sss="{"+"\"cmd\":\"modifyMember\",\"account\":\"zzz123\","+"\"name\":\"zzz\",\"sex\":1,\"birth\":\"2008-11-01\",\"email\":\"abc@gmail.com\",\"address\":\"abc\","
 //				+ "\"phone\":\"0912345678\",\"psd\":\"zzz123\"}";
 		
-		String sss="{\"cmd\":\"getAllCensorRecommendBook\"}";
-		
+//		String sss="{\"cmd\":\"getAllCensorRecommendBook\"}";
+		String sss="{\"cmd\":\"lookupMember\",\"account\":\"zzz123\"}";
 		
 		out = new PrintWriter(echoSocket.getOutputStream(),true);
 		in = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));		
