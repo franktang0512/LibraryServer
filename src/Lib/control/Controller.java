@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 //import java.util.Date;
 import java.util.Iterator;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.json.JSONObject;
 
@@ -22,7 +24,7 @@ public class Controller {
 	
 	
 	public Controller(){
-		
+
 		libmodel = LibModel.getInstance();
 	}
 	
@@ -543,7 +545,7 @@ public class Controller {
 				booksstring+=",";
 			}			
 		}
-		System.out.println("===================5");
+//		System.out.println("===================5");
 		booksstring="{\"status\":\"successful\",\"books\":["+booksstring+"]}";
 		responseJson= new JSONObject(booksstring);
 //		System.out.println(responseJson.toString());
@@ -679,10 +681,7 @@ public class Controller {
 //		
 //		return responseJson;
 //	}
-	//預約者在書還回後3天內會保留，取消超過3天的預約
-	public void checkReserver3Days() {
-		
-	}
+
 	
 
 	public String commandHandle(String inputLine) {
@@ -742,7 +741,6 @@ public class Controller {
 			case "forget":
 				respond=forget(object).toString();
 				break;	
-//////////////////////////////////////////////////////////////
 			case "reserve":
 				respond=reserve(object).toString();
 				break;	
@@ -786,3 +784,5 @@ public class Controller {
 	}
 
 }
+
+

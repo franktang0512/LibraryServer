@@ -2,12 +2,16 @@ package Lib.model;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import Lib.model.dao.*;
 import Lib.model.data.*;
 
 public class LibModel {
+	Timer timer;
 	//TODO:放ado
 	DAOData userDAO;
 	DAOData bookDAO;
@@ -25,12 +29,64 @@ public class LibModel {
 	//TODO:建立獨體模式
 	private volatile static LibModel libmodel;
 	private LibModel(){
+		timer= new Timer();
+		//每天跑一次
+		timer.schedule(new LibTimer(),2000L,1000*60*60*24L);
 		userDAO = new DAOUserImpl();
 		bookDAO = new DAOBookImpl();
 		historyDAO = new DAOHistoryImpl();	
 		resevationDAO = new DAOReservationImpl();
 		recommendationsDAO = new DAORecommendImpl();
 		updateModel();
+	}
+	//預約者在書還回後3天內會保留，取消超過3天的預約
+	public void checkReserver3Days() {
+		if(resevations==null) {
+			return;
+		}
+		for(Reservation r :resevations) {
+			if(r.getIsFinished()==0) {
+				Book book = null;
+				for(Book b : books) {
+					if(r.getBid().equals(b.getID())) {
+						book = b;
+						break;
+					}				
+				}
+				if(book.getAmount()>0) {
+					ArrayList<History> his = (ArrayList<History>) this.getBookHistroy(book);
+					if(his.size()==0) {
+						break;
+					}
+			        
+					long now = System.currentTimeMillis();
+			        Date currentdate = new Date(now);
+			        Date d=null;
+			        d = Date.valueOf("1900-01-01");
+
+					for(History h :his) {
+						if(d.after(h.getReturnDay())) {
+							d = h.getReturnDay();
+						}
+					}					
+				    Calendar c = Calendar.getInstance();
+			        c.setTime(d);
+			        c.add(Calendar.DATE, 3);
+			        d = new Date(c.getTimeInMillis());
+			        if(d.before(currentdate)) {
+			        	r.setIsFinished(1);
+			        	this.setReserve(r);
+			        }					
+				}			
+			}
+		}
+		updateModel();
+	}
+	
+	class LibTimer extends TimerTask{
+	    public void run() {
+	    	checkReserver3Days();
+	    }
 	}
 	
 	public static LibModel getInstance() {
@@ -225,7 +281,7 @@ public class LibModel {
 				  reserve.add(r);
 			  }
 		}	
-		System.out.println(reserve.size());
+//		System.out.println(reserve.size());
 		return reserve;
 	}
 	public Reservation getReserveByBookUser(Book b,User u) {	

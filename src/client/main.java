@@ -6,7 +6,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Calendar;
 import java.util.Scanner;
+import java.util.Timer;
 import java.sql.Date;
 
 public class main {
@@ -43,7 +45,18 @@ public class main {
 		out.println(sss);
 		String s1 = in.readLine();
 		System.out.println(s1);
-	    
+//	    
+		
+//		Calendar today = Calendar.getInstance();
+////		today.set(Calendar.HOUR_OF_DAY, 2);
+////		today.set(Calendar.MINUTE, 0);
+//		today.set(Calendar.SECOND, 0);
+//
+//		// every night at 2am you run your task
+//		Timer timer = new Timer();
+//		timer.schedule(new YourTask(), today.getTime(), TimeUnit.MILLISECONDS.convert(1, TimeUnit.DAYS)); 
+//		
+//		
 
 
 	}
