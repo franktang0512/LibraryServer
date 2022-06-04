@@ -144,7 +144,7 @@ public class LibModel {
 	//TODO:­É¾\¬ö¿ý
 	
 	
-	public synchronized List<History> getBookHistroy(Book b) {
+	public List<History> getBookHistroy(Book b) {
 		ArrayList<History> his=new ArrayList<History>();
 //		System.out.println("========0=======");
 		for(History h:histories) {
@@ -156,8 +156,7 @@ public class LibModel {
 		
 		return his;
 	}
-	//not yet
-	public synchronized List<History> getUserHistroy(User u) {
+	public List<History> getUserHistroy(User u) {
 		ArrayList<History> his=new ArrayList<History>();
 		for(History h:histories) {
 			if(h.getUid().equals(u.getId())) {
@@ -244,7 +243,7 @@ public class LibModel {
 	public List<Recommend> getNotCensoredRecommend(){
 		ArrayList<Recommend> rec=new ArrayList<Recommend>();
 		for(Recommend r:recommendations) {
-			if(r.getCensored()==0) {
+			if(r.getCensored()==2) {
 				rec.add(r);
 			}
 		}
@@ -265,7 +264,37 @@ public class LibModel {
 		updateModel();
 	}
 	
+	public boolean isSameRecommend(String s) {
+		boolean same = false;
+		for(Recommend r:recommendations) {
+			if(r.getBookInfo().equals(s)) {
+				same = true;
+			}
+		}
 
+		return same;
+	}
+	
+	public Recommend getNotCensoredRecommendByBookName(String s) {
+		Recommend re =null;
+		for(Recommend r:recommendations) {
+			if(r.getBookInfo().equals(s)&&r.getCensored()==2) {
+				re = r;
+			}
+		}
+
+		return re;
+	}
+	
+	public List<Recommend> getAllCensoredPassRecommend() {
+		ArrayList<Recommend> re =null;
+		for(Recommend r:recommendations) {
+			if(r.getCensored()==1) {
+				re.add(r);
+			}
+		}
+		return re;
+	}
 
 
 	

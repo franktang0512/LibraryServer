@@ -26,14 +26,14 @@ public class main {
 //		String sss="{"+"\"cmd\":\"returnBook\","+"\"book_id\":\"b00000000001\","+"\"account\":\"abc\"}";
 //		String sss="{"+"\"cmd\":\"borrowBook\","+"\"book_id\":\"b00000000001\","+"\"account\":\"abc\"}";
 //		String sss="{"+"\"cmd\":\"lookupBookHistory\","+"\"book_id\":\"b00000000001\"}";
-		String sss="{"+"\"cmd\":\"lookupUserHistory\","+"\"account\":\"abc\"}";
+//		String sss="{"+"\"cmd\":\"lookupUserHistory\","+"\"account\":\"abc\"}";
 //		String sss="{"+"\"cmd\":\"modifyMember\","+"\"account\":\"abc\",\"name\":\"zzz\",\"sex\":1,\"birth\":\"2008-11-01\",\"email\":\"abc@gmail.com\",\"address\":\"abc\","
 //				+ "\"phone\":\"0912345678\",\"psd\":\"zzz123\"}";
 		
 //		String sss="{"+"\"cmd\":\"modifyMember\",\"account\":\"zzz123\","+"\"name\":\"zzz\",\"sex\":1,\"birth\":\"2008-11-01\",\"email\":\"abc@gmail.com\",\"address\":\"abc\","
 //				+ "\"phone\":\"0912345678\",\"psd\":\"zzz123\"}";
 		
-		
+		String sss="{\"cmd\":\"getAllCensorRecommendBook\"}";
 		
 		
 		out = new PrintWriter(echoSocket.getOutputStream(),true);

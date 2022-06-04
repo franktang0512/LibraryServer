@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import Lib.model.LibModel;
 import Lib.model.data.Book;
 import Lib.model.data.History;
+import Lib.model.data.Recommend;
 import Lib.model.data.Reservation;
 import Lib.model.data.User;
 
@@ -241,22 +242,22 @@ public class Controller {
 
 	public JSONObject modifyMember(JSONObject object) {
 		JSONObject responseJson=null;
-		System.out.println("===========0=============");
+//		System.out.println("===========0=============");
 		String acc =  object.getString("account");//?
-		System.out.println("===========1=============");
+//		System.out.println("===========1=============");
 		User u = libmodel.getUserByAcc(acc);
-		System.out.println("===========2=============");
+//		System.out.println("===========2=============");
 		try {			
 			String name =  object.getString("name");
 			u.setName(name);
 		}catch(Exception e) {}
-		System.out.println("===========3=============");
+//		System.out.println("===========3=============");
 		try {			
 			int sex =  object.getInt("sex");
 			u.setSex(sex);
 
 		}catch(Exception e) {}
-		System.out.println("===========4=============");
+//		System.out.println("===========4=============");
 		try {			
 			String birth =  object.getString("birth");
 			try {
@@ -270,38 +271,38 @@ public class Controller {
 				responseJson= new JSONObject("{\"status\":\"fail\"}");
 			}
 		}catch(Exception e) {}
-		System.out.println("===========5=============");
+//		System.out.println("===========5=============");
 		try {			
 			String email =  object.getString("email");
 			u.setEmail(email);
 		}catch(Exception e) {}
-		System.out.println("===========6=============");
+//		System.out.println("===========6=============");
 		try {			
 			String address =  object.getString("address");
 			u.setAddress(address);
 		}catch(Exception e) {}
-		System.out.println("===========7=============");
+//		System.out.println("===========7=============");
 		try {			
 			String phone =  object.getString("phone");
 			u.setPhone(phone);
 		}catch(Exception e) {}
-		System.out.println("===========8=============");
+//		System.out.println("===========8=============");
 		try {			
 			int kind =  object.getInt("kind");//?
 			u.setKind(kind);
 		}catch(Exception e) {}
-		System.out.println("===========9=============");
+//		System.out.println("===========9=============");
 		try {			
 			int enable =  object.getInt("enable");//?
 			u.setEnable(enable);
 
 		}catch(Exception e) {}
-		System.out.println("===========10=============");
+//		System.out.println("===========10=============");
 		try {			
 			String psd =  object.getString("psd");
 			u.setPassword(psd);
 		}catch(Exception e) {}
-		System.out.println("===========11=============");
+//		System.out.println("===========11=============");
 		
 		libmodel.updateUser(u);
 		
@@ -494,8 +495,6 @@ public class Controller {
 		responseJson = new JSONObject("{\"status\":\"successful\"}");
 		return responseJson;
 	}
-	
-	
 	public JSONObject lookUpUserReserveBook(JSONObject object) {
 		JSONObject responseJson=null;
 		String account =  object.getString("account");
@@ -528,7 +527,7 @@ public class Controller {
 	}
 	
 	
-	//=============================================
+	
 	public JSONObject bookShouldReturnDay(JSONObject object) {
 		JSONObject responseJson=null;
 		String book_id =  object.getString("book_id");
@@ -567,37 +566,82 @@ public class Controller {
 	}
 	public JSONObject recommendBook(JSONObject object) {
 		JSONObject responseJson=null;
-		String book_id =  object.getString("book_id");
+		String book_name =  object.getString("book_name");
 		String account =  object.getString("account");
-		History history = new History();
+		if(libmodel.isSameRecommend(book_name)) {
+			responseJson = new JSONObject("{\"status\":\"fail\",\"msg\":\"someone has already recommended, contact lib admin to check detail if other books(more than 1) has same name of what you recommended \"}");
+			return responseJson;
+		}
+		User u = libmodel.getUserByAcc(account);
 		
-		
+		Recommend recommend = new Recommend();
+		recommend.setUserID(u.getId());
+		recommend.setBookInfo(book_name);
+		recommend.setCensored(2);
+		libmodel.addRecommend(recommend);
+		responseJson = new JSONObject("{\"status\":\"successful\"}");
 		return responseJson;
 	}
 	public JSONObject lookUpRecommendBook(JSONObject object) {
 		JSONObject responseJson=null;
-		String book_id =  object.getString("book_id");
-		String account =  object.getString("account");
-		History history = new History();
+		ArrayList<Recommend> rec = (ArrayList<Recommend>) libmodel.getNotCensoredRecommend();
+		if(rec==null) {			
+			return new JSONObject("{\"status\":\"fail\",\"message\":\"none of the recommended book\"}");
+		}
+		String booksstring ="";
 		
+		for(int i =0;i<rec.size();i++) {
+			
+			booksstring+="{\"book_id\":\""+rec.get(i).getBookInfo()+"\"}";
+			if(!(i==rec.size()-1)) {
+				booksstring+=",";
+			}			
+		}
 		
+//		System.out.println("booksstring:"+booksstring);
+		booksstring="{\"status\":\"successful\",\"books\":["+booksstring+"]}";
+		responseJson= new JSONObject(booksstring);
+//		System.out.println(responseJson.toString());
 		return responseJson;
+
 	}
+	//=============================================
+	
 	public JSONObject censorRecommendBook(JSONObject object) {
 		JSONObject responseJson=null;
-		String book_id =  object.getString("book_id");
-		String account =  object.getString("account");
-		History history = new History();
+		String book_name =  object.getString("book_name");
+		int pass =  object.getInt("pass");
 		
-		
+		Recommend recommend = libmodel.getNotCensoredRecommendByBookName(book_name);
+		if(recommend==null) {
+			return new JSONObject("{\"status\":\"fail\",\"message\":\"none of the book name\"}");			
+		}
+		recommend.setCensored(pass);		
+		libmodel.censoredRecommend(recommend);
+		responseJson = new JSONObject("{\"status\":\"successful\"}");
 		return responseJson;
+
 	}
 	public JSONObject getAllCensorRecommendBook(JSONObject object) {
 		JSONObject responseJson=null;
-		String book_id =  object.getString("book_id");
-		String account =  object.getString("account");
-		History history = new History();
+		ArrayList<Recommend> rec = (ArrayList<Recommend>) libmodel.getAllCensoredPassRecommend();
+		if(rec==null) {			
+			return new JSONObject("{\"status\":\"fail\",\"message\":\"no more censored recommend\"}");
+		}
+		String booksstring ="";
 		
+		for(int i =0;i<rec.size();i++) {
+			
+			booksstring+="{\"book_name\":\""+rec.get(i).getBookInfo()+"\"}";
+			if(!(i==rec.size()-1)) {
+				booksstring+=",";
+			}			
+		}
+		
+//		System.out.println("booksstring:"+booksstring);
+		booksstring="{\"status\":\"successful\",\"books\":["+booksstring+"]}";
+		responseJson= new JSONObject(booksstring);
+//		System.out.println(responseJson.toString());
 		
 		return responseJson;
 	}
