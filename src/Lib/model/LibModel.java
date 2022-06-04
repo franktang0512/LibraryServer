@@ -218,21 +218,25 @@ public class LibModel {
 		updateModel();
 	}
 	public List<Reservation> getReserveByUser(User u) {	
-		List<Reservation> reserve=null;
+		ArrayList<Reservation> reserve= new ArrayList<Reservation>();
+		
 		for (Reservation r : resevations) {
 			  if(u.getId().equals(r.getUid())&&r.getIsFinished()==0) {
 				  reserve.add(r);
 			  }
 		}	
+		System.out.println(reserve.size());
 		return reserve;
 	}
 	public Reservation getReserveByBookUser(Book b,User u) {	
 		Reservation reserve=null;
+		
 		for (Reservation r : resevations) {
 			  if(u.getId().equals(r.getUid())&&b.getID().equals(r.getBid())&&r.getIsFinished()==0) {
 				  reserve =r;
 			  }
 		}	
+
 		return reserve;
 	}
 	//取得預約中 預約時間最早的

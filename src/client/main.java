@@ -34,7 +34,9 @@ public class main {
 //				+ "\"phone\":\"0912345678\",\"psd\":\"zzz123\"}";
 		
 //		String sss="{\"cmd\":\"getAllCensorRecommendBook\"}";
-		String sss="{\"cmd\":\"lookupMember\",\"account\":\"zzz123\"}";
+//		String sss="{\"cmd\":\"lookupMember\",\"account\":\"zzz123\"}";
+//		String sss="{\"cmd\":\"reserve\",\"book_id\":\"b00000000001\",\"account\":\"zzz123\"}";
+		String sss="{\"cmd\":\"lookUpUserReserveBook\",\"account\":\"zzz123\"}";
 		
 		out = new PrintWriter(echoSocket.getOutputStream(),true);
 		in = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));		
