@@ -1,5 +1,6 @@
 package Lib.model;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -230,6 +231,23 @@ public class LibModel {
 		for (Reservation r : resevations) {
 			  if(u.getId().equals(r.getUid())&&b.getID().equals(r.getBid())&&r.getIsFinished()==0) {
 				  reserve =r;
+			  }
+		}	
+		return reserve;
+	}
+	//取得預約中 預約時間最早的
+	public List<Reservation> getReserveByBook(Book b) {	
+		ArrayList<Reservation> reserve= new ArrayList<Reservation>();
+
+		long now = System.currentTimeMillis();
+		Date d = new Date(now);
+		
+		for (Reservation r : resevations) {
+			  if(b.getID().equals(r.getBid())&&r.getIsFinished()==0) {
+				  if(r.getReserveDay().before(d)) {
+					  reserve.add(r);
+				  }
+				  
 			  }
 		}	
 		return reserve;

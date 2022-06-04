@@ -102,6 +102,25 @@ public class Controller {
 			responseJson = new JSONObject("{\"status\":\"fail\",\"message\":\"no stock, refresh the page to see more\"}");
 			return responseJson;
 		}
+		ArrayList<Reservation> r = (ArrayList<Reservation>) libmodel.getReserveByBook(b);
+	
+		for(int i =0;i<r.size();i++) {
+			//排隊中的人序號小於書量就可以借閱
+			if(r.get(i).getUid().equals(u.getId())&&i+1<=b.getAmount()) {
+				//結束預約狀態，進入借書程序
+				r.get(i).setIsFinished(1);
+				break;
+			}else if(r.get(i).getUid().equals(u.getId())&&i+1>b.getAmount()) {
+				responseJson = new JSONObject("{\"status\":\"fail\",\"message\":\"you have to wait for the order\"}");
+				return responseJson;
+			}
+			//排隊預約的人>=現有書量 就無法借閱
+			if(i==r.size()-1&&r.size()>=b.getAmount()) {
+				responseJson = new JSONObject("{\"status\":\"fail\",\"message\":\"someone is reserving\"}");
+				return responseJson;
+			}			
+		}
+		
 		long now = System.currentTimeMillis();
 		Date sqlDate = new Date(now);
 		History history = new History();
