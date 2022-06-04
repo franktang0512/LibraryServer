@@ -516,22 +516,22 @@ public class Controller {
 	}
 	public JSONObject lookUpUserReserveBook(JSONObject object) {
 		JSONObject responseJson=null;
-		System.out.println("===================0");
+//		System.out.println("===================0");
 		String account =  object.getString("account");
 		User u = libmodel.getUserByAcc(account);
-		System.out.println("===================1");
+//		System.out.println("===================1");
 		ArrayList<Reservation> userreserve = (ArrayList<Reservation>)libmodel.getReserveByUser(u);
-		System.out.println("===================2");
+//		System.out.println("===================2");
 		if(userreserve==null) {
 			responseJson = new JSONObject("{\"status\":\"fail\",\"msg\":\"no reservation so far\"}");
 			return responseJson;			
 		}
-		System.out.println("===================3");
+//		System.out.println("===================3");
 		ArrayList<Book> b = new ArrayList<Book>();
 		for(Reservation r:userreserve) {
 			b.add(libmodel.getBookByID(r.getBid()));
 		}
-		System.out.println("===================4");
+//		System.out.println("===================4");
 		String booksstring = "";
 		for(int i =0;i<b.size();i++) {
 			
