@@ -40,7 +40,12 @@ public class main {
 //		String sss="{\"cmd\":\"reserve\",\"book_id\":\"b00000000001\",\"account\":\"zzz123\"}";
 //		String sss="{\"cmd\":\"lookUpUserReserveBook\",\"account\":\"zzz123\"}";
 //		String sss="{\"cmd\":\"recommendBook\",\"book_name\":\"dsa\",\"account\":\"zzz123\"}";
-		String sss="{\"cmd\":\"lookUpRecommendBook\"}";
+//		String sss="{\"cmd\":\"lookUpRecommendBook\"}";
+		
+//		String sss="{\"cmd\":\"checkreserve\",\"account\":\"zzz123\"}";
+		
+//		String sss="{\"cmd\":\"lookupUserHistory\",\"account\":\"zzz123\"}";
+		String sss="{\"cmd\":\"continueBorrow\",\"account\":\"zzz123\",\"book_id\":\"b00000000001\"}";
 		
 		
 		out = new PrintWriter(echoSocket.getOutputStream(),true);

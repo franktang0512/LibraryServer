@@ -17,7 +17,7 @@ public class DAOBookImpl implements DAOData<Book>{
 	public void save(Book b) {
 
 	    String sql_count = "select count(*) from lib_book";
-	    String sql_insert = "INSERT INTO lib_book(b_id,b_name,author,pubyear,isbn,amount,publisher) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+	    String sql_insert = "INSERT INTO lib_book(b_id,b_name,author,pubyear,isbn,amount,publisher) VALUES(?,?,?,?,?,?,?)";
 	    Connection conn = null;
 	    PreparedStatement ps = null;
 	    ResultSet rs = null;
@@ -36,7 +36,7 @@ public class DAOBookImpl implements DAOData<Book>{
 	        String book_id = "b" + str;
 
 	        ps = conn.prepareStatement(sql_insert);
-	        ps.setString(1, b.getID());
+	        ps.setString(1, book_id);
 	        ps.setString(2, b.getName());
 	        ps.setString(3, b.getAuthor());
 	        ps.setInt(4,b.getPublishYear());

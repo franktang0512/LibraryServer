@@ -179,10 +179,14 @@ public class LibModel {
 		//如果已經有了只要數量++
 //		System.out.println(b.getID());
 		boolean exist=false;
+		
 		for(Book book : books) {
 //			System.out.println(book.getID());
 //			System.out.println(b.getIsbn().equals(book.getIsbn()));
-//			System.out.println(b.getID().equals(book.getID()))			
+//			System.out.println(b.getID().equals(book.getID()))		
+			if(b.getID()==null) {
+				break;
+			}
 			if(/*b.getIsbn().equals(book.getIsbn())||*/b.getID().equals(book.getID())) {				
 //				System.out.println(book.getAmount());
 				book.setAmount(book.getAmount()+add_amount);

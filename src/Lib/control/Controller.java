@@ -771,7 +771,7 @@ public class Controller {
 		Book b =libmodel.getBookByID(book_id);
 		//先檢查reserve 有沒有人排這本書
 		ArrayList<Reservation> rrr = (ArrayList<Reservation>)libmodel.getReserveByBook(b);
-		if(rrr.size()>0) {
+		if(rrr.size()>0&&!rrr.get(0).getUid().equals(u.getId())) {
 			return new JSONObject("{\"status\":\"fail\",\"message\":\"someone has been reserving\"}");			
 		}
 		
