@@ -243,6 +243,7 @@ public class LibModel {
 	
 	public synchronized void takeOutBook(History h) {
 //		History his = new History();
+		//更動書籍數量
 		for(Book book : books) {
 			if(book.getID().equals(h.getBid())) {
 				book.setAmount(book.getAmount()-1);
@@ -250,7 +251,7 @@ public class LibModel {
 				break;
 			}
 		}		
-		
+		//加入新的借閱紀錄
 		historyDAO.save(h);		
 		updateModel();
 	}

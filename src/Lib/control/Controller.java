@@ -464,8 +464,10 @@ public class Controller {
 				iscontinue=1;
 			}
 			
-			s+="{\"book_id\":\""+b.getID()+"\",\"book_name\":\""+b.getName()+"\",\"borrow_date\":\""+(borrowdate!=null?borrowdate.toString():null)+"\",\"return_date\":\""
-			+(returndate!=null?returndate.toString():null)+"\""+",\"isContinue\":"+iscontinue+"}";
+			s+="{\"book_id\":\""+b.getID()+"\",\"book_name\":\""+b.getName()+"\","
+							+ "\"borrow_date\":\""+(borrowdate!=null?borrowdate.toString():null)+"\","
+							+ "\"return_date\":\""+(returndate!=null?returndate.toString():null)+"\""+","
+							+ "\"isContinue\":"+iscontinue+"}";
 			if(i!=hislist_continue.size()-1) {
 				s+=",";
 			}
@@ -709,6 +711,91 @@ public class Controller {
 		return responseJson;
 	}
 
+	
+	
+	public JSONObject checkreserve(JSONObject object) {
+		JSONObject responseJson=null;
+		String account =  object.getString("account");
+		User u = libmodel.getUserByAcc(account);
+		ArrayList<Reservation> reserves = (ArrayList<Reservation>) libmodel.getReserveByUser(u);
+		ArrayList<Book> books = new ArrayList<Book>();
+		for(Reservation r :reserves) {
+			Book b = libmodel.getBookByID(r.getBid());
+			if(b.getAmount()>0) {
+				
+				ArrayList<Reservation> rrr = (ArrayList<Reservation>) libmodel.getReserveByBook(b);
+				if(rrr.size() !=0) {
+					int order =0;
+					for(int i =0;i<rrr.size();i++) {
+						if(rrr.get(i).getUid().equals(u.getId())){
+							order = i+1;
+						}
+					}
+					if(order <= b.getAmount()) {
+						books.add(b);
+						continue;
+					}					
+				}else {
+					books.add(b);
+				}				
+			}			
+		}
+		String booksstring="";
+		if(books.size()==0) {
+			return new JSONObject("{\"status\":\"fail\",\"message\":\"no reseved book can be borrowed\"}");
+			
+		}
+		for(int i =0;i<books.size();i++) {
+			
+			booksstring+="{\"book_id\":\""+books.get(i).getID()+"\",\"book_name\":\""+books.get(i).getName()+"\","
+					+ "\"author\":\""+books.get(i).getAuthor()+"\",\"publishedYear\":"+books.get(i).getPublishYear()+","
+							+ "\"publisher\":\""+books.get(i).getPublisher()+"\",\"isbn\":\""+books.get(i).getIsbn()+"\","
+									+ "\"quantity\":"+books.get(i).getAmount()+"}";
+			if(!(i==books.size()-1)) {
+				booksstring+=",";
+			}			
+		}		
+		booksstring="{\"status\":\"successful\",\"books\":["+booksstring+"]}";
+		responseJson= new JSONObject(booksstring);
+		
+		return responseJson;
+	}
+	
+	
+	
+	public JSONObject continueBorrow(JSONObject object) {
+		JSONObject responseJson=null;
+		String book_id =  object.getString("book_id");
+		String account =  object.getString("account");
+		User u = libmodel.getUserByAcc(account);
+		Book b =libmodel.getBookByID(book_id);
+		//先檢查reserve 有沒有人排這本書
+		ArrayList<Reservation> rrr = (ArrayList<Reservation>)libmodel.getReserveByBook(b);
+		if(rrr.size()>0) {
+			return new JSONObject("{\"status\":\"fail\",\"message\":\"someone has been reserving\"}");			
+		}
+		
+		//沒有排隊的書就可以借 先歸還時間再重新計算
+		History history = libmodel.getHistroy(u, b);
+		long now = System.currentTimeMillis();
+		Date sqlDate = new Date(now);
+		history.setReturnDay(sqlDate);		
+		libmodel.putBackBook(history);
+		
+		History history_new = new  History();
+		history_new.setBid(b.getID());
+		history_new.setUid(u.getId());
+		history_new.setBorrowDay(sqlDate);
+		libmodel.takeOutBook(history_new);
+
+		responseJson = new JSONObject("{\"status\":\"successful\"}");		
+		
+		return responseJson;
+	}
+	
+	
+	
+	
 //	public JSONObject returnBook(JSONObject object) {
 //		JSONObject responseJson=null;
 //		String book_id =  object.getString("book_id");
@@ -807,6 +894,12 @@ public class Controller {
 				
 			case "getAllCensorRecommendBook":
 				respond=getAllCensorRecommendBook(object).toString();
+				break;
+			case "checkreserve":
+				respond=checkreserve(object).toString();
+				break;
+			case "continueBorrow":
+				respond=continueBorrow(object).toString();
 				break;
 				
 			//more 管理員發布訊息
