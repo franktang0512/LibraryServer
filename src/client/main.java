@@ -15,7 +15,7 @@ public class main {
 
 	public static void main(String[] args) throws UnknownHostException, IOException {
 		// TODO Auto-generated method stub
-//		Socket echoSocket=new Socket("140.122.184.121",10234);
+//		Socket echoSocket=new Socket("140.122.184.121",10235);
 		Socket echoSocket=new Socket("127.0.0.1",10234);
 		PrintWriter out;
 		BufferedReader in;
@@ -38,14 +38,17 @@ public class main {
 //		String sss="{\"cmd\":\"getAllCensorRecommendBook\"}";
 //		String sss="{\"cmd\":\"lookupMember\",\"account\":\"zzz123\"}";
 //		String sss="{\"cmd\":\"reserve\",\"book_id\":\"b00000000001\",\"account\":\"zzz123\"}";
-		String sss="{\"cmd\":\"lookUpUserReserveBook\",\"account\":\"zzz123\"}";
+//		String sss="{\"cmd\":\"lookUpUserReserveBook\",\"account\":\"zzz123\"}";
+//		String sss="{\"cmd\":\"recommendBook\",\"book_name\":\"dsa\",\"account\":\"zzz123\"}";
+		String sss="{\"cmd\":\"lookUpRecommendBook\"}";
+		
 		
 		out = new PrintWriter(echoSocket.getOutputStream(),true);
 		in = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));		
 		out.println(sss);
 		String s1 = in.readLine();
 		System.out.println(s1);
-//	    
+//	    {"cmd":"recommendBook","book_name":"dsa","account":"zzz123"}
 		
 //		Calendar today = Calendar.getInstance();
 ////		today.set(Calendar.HOUR_OF_DAY, 2);

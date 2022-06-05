@@ -411,6 +411,7 @@ public class Controller {
 		String account =  object.getString("account");
 		User u = libmodel.getUserByAcc(account);
 		ArrayList<History> hislist = (ArrayList<History>) libmodel.getUserHistroy(u);
+		
 		//TODO:¼g¦¨JSON
 		
 //		System.out.println("========1=======");
@@ -418,10 +419,31 @@ public class Controller {
 		if(hislist.size()==0) {
 			return new JSONObject("{\"status\":\"fail\",\"message\":\"none of the record\"}");
 		}
+		ArrayList<History> hislist_continue = new ArrayList<History>();
+		//¦X¨ÖÄò­É¬ö¿ý
+		for(int i =0;i<hislist.size();i++) {
+			History h = new History();
+			if(i<=hislist.size()-2&&hislist.get(i).getBid().equals(hislist.get(i+1).getBid())&&hislist.get(i).getUid().equals(hislist.get(i+1).getUid())&&hislist.get(i).getReturnDay().toString().equals(hislist.get(i+1).getBorrowDay().toString())) {
+				h.setHid(hislist.get(i).getHid());
+				h.setBid(hislist.get(i).getBid());
+				h.setBorrowDay(hislist.get(i).getBorrowDay());
+				h.setReturnDay(hislist.get(i+1).getReturnDay());
+				h.setUid(hislist.get(i).getUid());
+				hislist_continue.add(h);
+				i++;
+				continue;
+			}
+			h.setHid(hislist.get(i).getHid());
+			h.setBid(hislist.get(i).getBid());
+			h.setBorrowDay(hislist.get(i).getBorrowDay());
+			h.setReturnDay(hislist.get(i+1).getReturnDay());
+			h.setUid(hislist.get(i).getUid());
+			hislist_continue.add(h);			
+		}
 //		System.out.println("========2=======");
 		String s ="";
-		for(int i =0;i<hislist.size();i++) {
-			History h =  hislist.get(i);
+		for(int i =0;i<hislist_continue.size();i++) {
+			History h =  hislist_continue.get(i);
 			String bid = h.getBid();
 //			System.out.println("========3=======");
 			Book b = libmodel.getBookByID(bid);
@@ -430,10 +452,21 @@ public class Controller {
 			String useracc = u.getAccount();
 			Date borrowdate =h.getBorrowDay();
 			Date returndate = h.getReturnDay();
+			long now = System.currentTimeMillis();
+			Date returndate_ = (returndate!=null?returndate:new Date(now));
+			Date borrowdate_ =(Date) borrowdate.clone();
+		    Calendar c = Calendar.getInstance();
+	        c.setTime(borrowdate_);
+	        c.add(Calendar.DATE, 30);
+	        borrowdate_= new Date(c.getTimeInMillis());
+			int iscontinue =0;
+			if(borrowdate_.before(returndate_)) {
+				iscontinue=1;
+			}
 			
 			s+="{\"book_id\":\""+b.getID()+"\",\"book_name\":\""+b.getName()+"\",\"borrow_date\":\""+(borrowdate!=null?borrowdate.toString():null)+"\",\"return_date\":\""
-			+(returndate!=null?returndate.toString():null)+"\"}";
-			if(i!=hislist.size()-1) {
+			+(returndate!=null?returndate.toString():null)+"\""+",\"isContinue\":"+iscontinue+"}";
+			if(i!=hislist_continue.size()-1) {
 				s+=",";
 			}
 //			System.out.println("========6=======");
@@ -594,17 +627,21 @@ public class Controller {
 		JSONObject responseJson=null;
 		String book_name =  object.getString("book_name");
 		String account =  object.getString("account");
+//		System.out.println("===================1");
 		if(libmodel.isSameRecommend(book_name)) {
 			responseJson = new JSONObject("{\"status\":\"fail\",\"msg\":\"someone has already recommended, contact lib admin to check detail if other books(more than 1) has same name of what you recommended \"}");
 			return responseJson;
 		}
+		System.out.println(libmodel.isSameRecommend(book_name));
+//		System.out.println("===================2");
 		User u = libmodel.getUserByAcc(account);
-		
+//		System.out.println("===================3");
 		Recommend recommend = new Recommend();
 		recommend.setUserID(u.getId());
 		recommend.setBookInfo(book_name);
 		recommend.setCensored(2);
 		libmodel.addRecommend(recommend);
+//		System.out.println("===================4");
 		responseJson = new JSONObject("{\"status\":\"successful\"}");
 		return responseJson;
 	}
