@@ -419,11 +419,12 @@ public class Controller {
 		if(hislist.size()==0) {
 			return new JSONObject("{\"status\":\"fail\",\"message\":\"none of the record\"}");
 		}
+		System.out.println("========1=======1");
 		
 		ArrayList<History> hislist_continue = new ArrayList<History>();
 		//¦X¨ÖÄò­É¬ö¿ý
 		for(int i =0;i<hislist.size();i++) {
-
+			System.out.println("========1=======2");
 			if(i==0) {
 				History h = new History();
 				h.setBid(hislist.get(i).getBid());
@@ -432,15 +433,19 @@ public class Controller {
 				h.setBorrowDay(hislist.get(i).getBorrowDay());
 				h.setReturnDay(hislist.get(i).getReturnDay());
 				hislist_continue.add(h);
+				System.out.println("========1=======3");
 				continue;					
 			}
-			if(hislist.get(i).getBid().equals(hislist_continue.get(hislist_continue.size()-1).getBid())&&hislist.get(i).getBorrowDay().toString().equals(hislist_continue.get(hislist_continue.size()-1).getReturnDay().toString())) {
+			
+			if(hislist.get(i).getReturnDay()!=null&&hislist.get(i).getBid().equals(hislist_continue.get(hislist_continue.size()-1).getBid())&&hislist.get(i).getBorrowDay().toString().equals(hislist_continue.get(hislist_continue.size()-1).getReturnDay().toString())
+					) {
 				
 				hislist_continue.get(hislist_continue.size()-1).setBid(hislist_continue.get(hislist_continue.size()-1).getBid());
 				hislist_continue.get(hislist_continue.size()-1).setHid(hislist_continue.get(hislist_continue.size()-1).getHid());
 				hislist_continue.get(hislist_continue.size()-1).setUid(hislist_continue.get(hislist_continue.size()-1).getUid());
 				hislist_continue.get(hislist_continue.size()-1).setBorrowDay(hislist_continue.get(hislist_continue.size()-1).getBorrowDay());
 				hislist_continue.get(hislist_continue.size()-1).setReturnDay(hislist.get(i).getReturnDay());
+				System.out.println("========1=======4");
 				continue;
 				
 			}else {
@@ -451,6 +456,7 @@ public class Controller {
 				h.setBorrowDay(hislist.get(i).getBorrowDay());
 				h.setReturnDay(hislist.get(i).getReturnDay());
 				hislist_continue.add(h);
+				System.out.println("========1=======5");
 			}				
 					
 		}

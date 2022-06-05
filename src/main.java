@@ -27,7 +27,7 @@ public class main {
 			try{
 				System.out.println(args);
 		        	//create server socket
-				libSocket = new ServerSocket(10234);
+				libSocket = new ServerSocket(10235);
 				System.out.println("start server");
 				try{ 
 					while (true){

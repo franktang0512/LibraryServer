@@ -16,7 +16,7 @@ public class main {
 	public static void main(String[] args) throws UnknownHostException, IOException {
 		// TODO Auto-generated method stub
 //		Socket echoSocket=new Socket("140.122.184.121",10235);
-		Socket echoSocket=new Socket("127.0.0.1",10234);
+		Socket echoSocket=new Socket("127.0.0.1",10235);
 		PrintWriter out;
 		BufferedReader in;
 //		String sss="{\"cmd\":\"login\",\"account\":\"zzz123\",\"psd\":\"zzz123\"}";
@@ -28,7 +28,7 @@ public class main {
 //		String sss="{"+"\"cmd\":\"returnBook\","+"\"book_id\":\"b00000000001\","+"\"account\":\"abc\"}";
 //		String sss="{"+"\"cmd\":\"borrowBook\","+"\"book_id\":\"b00000000001\","+"\"account\":\"abc\"}";
 //		String sss="{"+"\"cmd\":\"lookupBookHistory\","+"\"book_id\":\"b00000000001\"}";
-		String sss="{"+"\"cmd\":\"lookupUserHistory\","+"\"account\":\"abc\"}";
+		String sss="{\"cmd\":\"lookupUserHistory\",\"account\":\"zzz123\"}";
 //		String sss="{"+"\"cmd\":\"modifyMember\","+"\"account\":\"abc\",\"name\":\"zzz\",\"sex\":1,\"birth\":\"2008-11-01\",\"email\":\"abc@gmail.com\",\"address\":\"abc\","
 //				+ "\"phone\":\"0912345678\",\"psd\":\"zzz123\"}";
 		
