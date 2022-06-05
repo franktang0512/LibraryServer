@@ -40,7 +40,7 @@ public class LibModel {
 		updateModel();
 	}
 	//預約者在書還回後3天內會保留，取消超過3天的預約
-	public void checkReserver3Days() {
+	private synchronized void checkReserver3Days() {
 		if(resevations==null) {
 			return;
 		}

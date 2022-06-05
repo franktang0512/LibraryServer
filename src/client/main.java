@@ -15,8 +15,8 @@ public class main {
 
 	public static void main(String[] args) throws UnknownHostException, IOException {
 		// TODO Auto-generated method stub
-//		Socket echoSocket=new Socket("140.122.184.121",10235);
-		Socket echoSocket=new Socket("127.0.0.1",10235);
+		Socket echoSocket=new Socket("140.122.184.121",10235);
+//		Socket echoSocket=new Socket("127.0.0.1",10235);
 		PrintWriter out;
 		BufferedReader in;
 //		String sss="{\"cmd\":\"login\",\"account\":\"zzz123\",\"psd\":\"zzz123\"}";
