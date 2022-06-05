@@ -414,19 +414,19 @@ public class Controller {
 		
 		//TODO:寫成JSON
 		
-		System.out.println("========1=======");
+//		System.out.println("========1=======");
 		//TODO:寫成JSON
 		if(hislist.size()==0) {
 			return new JSONObject("{\"status\":\"fail\",\"message\":\"none of the record\"}");
 		}
-		System.out.println("========1=======1");
+//		System.out.println("========1=======1");
 		
 		ArrayList<History> hislist_continue = new ArrayList<History>();
 		ArrayList<String> continue_b = new ArrayList<String>();
 		int x =0;
 		//合併續借紀錄
 		for(int i =0;i<hislist.size();i++) {
-			System.out.println("========1=======2");
+//			System.out.println("========1=======2");
 			if(i==0) {
 				History h = new History();
 				h.setBid(hislist.get(i).getBid());
@@ -436,7 +436,7 @@ public class Controller {
 				h.setReturnDay(hislist.get(i).getReturnDay());
 				hislist_continue.add(h);
 				continue_b.add("0");
-				System.out.println("========1=======3");
+//				System.out.println("========1=======3");
 				continue;					
 			}
 			
@@ -449,7 +449,7 @@ public class Controller {
 				hislist_continue.get(hislist_continue.size()-1).setBorrowDay(hislist_continue.get(hislist_continue.size()-1).getBorrowDay());
 				hislist_continue.get(hislist_continue.size()-1).setReturnDay(hislist.get(i).getReturnDay());
 				continue_b.set(continue_b.size()-1, "1");
-				System.out.println("========1=======4");
+//				System.out.println("========1=======4");
 				continue;
 				
 			}else if(hislist_continue.get(hislist_continue.size()-1).getReturnDay()!=null&&hislist.get(i).getBid().equals(hislist_continue.get(hislist_continue.size()-1).getBid())&&hislist.get(i).getBorrowDay().toString().equals(hislist_continue.get(hislist_continue.size()-1).getReturnDay().toString())){
@@ -459,7 +459,7 @@ public class Controller {
 				hislist_continue.get(hislist_continue.size()-1).setBorrowDay(hislist_continue.get(hislist_continue.size()-1).getBorrowDay());
 				hislist_continue.get(hislist_continue.size()-1).setReturnDay(null);
 				continue_b.set(continue_b.size()-1, "1");
-				System.out.println("========1=======41");
+//				System.out.println("========1=======41");
 			}else {
 				History h = new History();
 				h.setBid(hislist.get(i).getBid());
@@ -469,7 +469,7 @@ public class Controller {
 				h.setReturnDay(hislist.get(i).getReturnDay());
 				hislist_continue.add(h);
 				continue_b.add("0");
-				System.out.println("========1=======5");
+//				System.out.println("========1=======5");
 			}				
 					
 		}
@@ -477,9 +477,9 @@ public class Controller {
 		for(int i =0;i<hislist_continue.size();i++) {
 			History h =  hislist_continue.get(i);
 			String bid = h.getBid();
-			System.out.println("========3=======");
+//			System.out.println("========3=======");
 			Book b = libmodel.getBookByID(bid);
-			System.out.println("========4=======");
+//			System.out.println("========4=======");
 			String username = u.getName();
 			String useracc = u.getAccount();
 			Date borrowdate =h.getBorrowDay();
@@ -503,9 +503,9 @@ public class Controller {
 			if(i!=hislist_continue.size()-1) {
 				s+=",";
 			}
-			System.out.println("========6=======");
+//			System.out.println("========6=======");
 		}
-		System.out.println("========7=======");
+//		System.out.println("========7=======");
 
 		String hisstring="{\"status\":\"successful\",\"histories\":["+s+"]}";
 		responseJson = new JSONObject(hisstring);
