@@ -422,6 +422,8 @@ public class Controller {
 		System.out.println("========1=======1");
 		
 		ArrayList<History> hislist_continue = new ArrayList<History>();
+		ArrayList<String> continue_b = new ArrayList<String>();
+		int x =0;
 		//¦X¨ÖÄò­É¬ö¿ı
 		for(int i =0;i<hislist.size();i++) {
 			System.out.println("========1=======2");
@@ -433,6 +435,7 @@ public class Controller {
 				h.setBorrowDay(hislist.get(i).getBorrowDay());
 				h.setReturnDay(hislist.get(i).getReturnDay());
 				hislist_continue.add(h);
+				continue_b.add("0");
 				System.out.println("========1=======3");
 				continue;					
 			}
@@ -445,9 +448,18 @@ public class Controller {
 				hislist_continue.get(hislist_continue.size()-1).setUid(hislist_continue.get(hislist_continue.size()-1).getUid());
 				hislist_continue.get(hislist_continue.size()-1).setBorrowDay(hislist_continue.get(hislist_continue.size()-1).getBorrowDay());
 				hislist_continue.get(hislist_continue.size()-1).setReturnDay(hislist.get(i).getReturnDay());
+				continue_b.set(continue_b.size()-1, "1");
 				System.out.println("========1=======4");
 				continue;
 				
+			}else if(hislist_continue.get(hislist_continue.size()-1).getReturnDay()!=null&&hislist.get(i).getBid().equals(hislist_continue.get(hislist_continue.size()-1).getBid())&&hislist.get(i).getBorrowDay().toString().equals(hislist_continue.get(hislist_continue.size()-1).getReturnDay().toString())){
+				hislist_continue.get(hislist_continue.size()-1).setBid(hislist_continue.get(hislist_continue.size()-1).getBid());
+				hislist_continue.get(hislist_continue.size()-1).setHid(hislist_continue.get(hislist_continue.size()-1).getHid());
+				hislist_continue.get(hislist_continue.size()-1).setUid(hislist_continue.get(hislist_continue.size()-1).getUid());
+				hislist_continue.get(hislist_continue.size()-1).setBorrowDay(hislist_continue.get(hislist_continue.size()-1).getBorrowDay());
+				hislist_continue.get(hislist_continue.size()-1).setReturnDay(null);
+				continue_b.set(continue_b.size()-1, "1");
+				System.out.println("========1=======41");
 			}else {
 				History h = new History();
 				h.setBid(hislist.get(i).getBid());
@@ -456,6 +468,7 @@ public class Controller {
 				h.setBorrowDay(hislist.get(i).getBorrowDay());
 				h.setReturnDay(hislist.get(i).getReturnDay());
 				hislist_continue.add(h);
+				continue_b.add("0");
 				System.out.println("========1=======5");
 			}				
 					
@@ -471,22 +484,22 @@ public class Controller {
 			String useracc = u.getAccount();
 			Date borrowdate =h.getBorrowDay();
 			Date returndate = h.getReturnDay();
-			long now = System.currentTimeMillis();
-			Date returndate_ = (returndate!=null?returndate:new Date(now));
-			Date borrowdate_ =(Date) borrowdate.clone();
-		    Calendar c = Calendar.getInstance();
-	        c.setTime(borrowdate_);
-	        c.add(Calendar.DATE, 30);
-	        borrowdate_= new Date(c.getTimeInMillis());
-			int iscontinue =0;
-			if(borrowdate_.before(returndate_)) {
-				iscontinue=1;
-			}
+//			long now = System.currentTimeMillis();
+//			Date returndate_ = (returndate!=null?returndate:new Date(now));
+//			Date borrowdate_ =(Date) borrowdate.clone();
+//		    Calendar c = Calendar.getInstance();
+//	        c.setTime(borrowdate_);
+//	        c.add(Calendar.DATE, 30);
+//	        borrowdate_= new Date(c.getTimeInMillis());
+//			int iscontinue =0;
+//			if(borrowdate_.before(returndate_)) {
+//				iscontinue=1;
+//			}
 			
 			s+="{\"book_id\":\""+b.getID()+"\",\"book_name\":\""+b.getName()+"\","
 							+ "\"borrow_date\":\""+(borrowdate!=null?borrowdate.toString():null)+"\","
 							+ "\"return_date\":\""+(returndate!=null?returndate.toString():null)+"\""+","
-							+ "\"isContinue\":"+iscontinue+"}";
+							+ "\"isContinue\":"+continue_b.get(i)+"}";
 			if(i!=hislist_continue.size()-1) {
 				s+=",";
 			}
